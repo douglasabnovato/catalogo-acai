@@ -1,58 +1,174 @@
-# Catálogo de Açaí
+# 🟣 Açaí Garagem
 
-Um catálogo de açaí para montar a melhor versão do seu açaí
+> **Status do Projeto:** 🚀 Em Desenvolvimento (MVP)  
+> **Área:** Gastronomia Digital / E-commerce  
+> **Tech Stack:** Vue 3 + Tailwind CSS + Laravel
 
-## Plano de Ação do projeto
+---
 
-📋 Plano de Ação: Catálogo Açaí Garagem (Fullstack)
-Configuração de Ambiente de Desenvolvimento (Sênior): Alinhamento de PHP, Composer, Node.js e Laragon para garantir que o terminal responda globalmente.
+## 📝 Descrição do Projeto
 
-Arquitetura Base e Instalação Clean: Criação do projeto Laravel + Breeze + Vue 3 em pasta limpa, evitando erros de diretório ocupado.
+O **Açaí Garagem** é uma solução de catálogo digital interativo projetada para otimizar o fluxo de pedidos de uma lanchonete artesanal. O foco principal é a experiência de personalização (**Visual Builder**), permitindo que o cliente monte seu copo em camadas e finalize a compra através de um payload estruturado enviado diretamente ao WhatsApp da unidade.
 
-Estruturação do Banco de Dados (Schema): Criação das migrations para Produtos (tamanhos de açaí, salgados, sucos) e Adicionais, usando SQLite.
+O projeto segue os pilares de **Engenharia de Performance** da **learnTECH**, priorizando carregamento instantâneo, código limpo (S.O.L.I.D.) e uma interface mobile-first de alta conversão.
 
-Desenvolvimento do Backend (API & Inertia): Criação dos Models, Controllers e as rotas que levarão os dados do banco para o Vue.
+---
 
-Desenvolvimento do Frontend (UI/UX): Implementação da Landing Page, Componente de Seleção de Açaí (lógica de 3 adicionais gratuitos) e Grid de Produtos com Tailwind CSS.
+## 📋 Inventário de Produtos e Informações
 
-Integração e Checkout Simples: Configuração do fluxo de fechamento de pedido com envio direto para o WhatsApp da lanchonete.
+Abaixo está a transcrição técnica dos ativos e regras de negócio identificados.
 
-Deploy e Homologação: Preparação para colocar o catálogo online (Produção).
+### 🥤 1. Açaí (Montagem Artesanal)
+
+- **Regra de Negócio:** Direito a **3 acompanhamentos gratuitos** inclusos na montagem em camadas.
+- **Tamanhos e Preços:**
+    - [ ] 300ml — `R$ 17,90`
+    - [ ] 400ml — `R$ 21,90`
+    - [ ] 500ml — `R$ 24,90`
+    - [ ] 700ml — `R$ 26,90`
+- **Acompanhamentos Disponíveis:**
+    - **Secos:** Leite em pó, Granola, Paçoca, Ovomaltine, Chocoball, Confete.
+    - **Frutas:** Morango picado, Banana picada.
+    - **Cremes/Caldas:** Calda de chocolate, Mel, Leite condensado, Chantilly.
+- **⚡ Adicional Especial (Upsell):** Whey Protein (no açaí ou vitaminas) — `+ R$ 9,00`.
+
+### 🏠 2. Linha para Casa (Bulk)
+
+| Item              | Quantidade   | Preço                |
+| :---------------- | :----------- | :------------------- |
+| Açaí Tradicional  | 1 Litro      | `R$ 39,00`           |
+| Açaí Barra        | 1 KG         | `R$ 29,00`           |
+| Xarope de Guaraná | 500 ML / 5 L | `R$ 9,00 / R$ 65,00` |
+| Granola Especial  | 1 KG         | `R$ 39,00`           |
+
+### 🥐 3. Complementos (Salgados & Bebidas)
+
+- **Salgados (`R$ 9,50`):** Esfihas (Frango/Carne), Enrolados, Pastel Integral, Cigarrete e Coxinha.
+- **Saudáveis & Bebidas (`R$ 11,90`):** Sucos naturais, Vitaminas e Sanduíches (Natural/Sírio).
+
+---
+
+## 🎨 Design & Estratégia de UX
+
+### Guia de Estilo (Look & Feel)
+
+| Elemento            | Referência                           | Aplicação Sugerida                   |
+| :------------------ | :----------------------------------- | :----------------------------------- |
+| **Cores Primárias** | `Roxo (#6B2D8E)` / `Verde (#2EAD5E)` | Branding, botões de ação e seleção.  |
+| **Cores de Apoio**  | `Amarelo Quente` e `Laranja`         | Backgrounds secundários e badges.    |
+| **Tipografia**      | `Fredoka One` ou `Poppins`           | Títulos amigáveis e preços legíveis. |
+| **Disposição**      | `Cards` com cantos arredondados      | Listagem de produtos e modais.       |
+
+### 🧠 Análise de UX & Design System
+
+- **Visual Builder:** Interface reativa onde o usuário vê o "copo virtual" sendo preenchido conforme seleciona os itens.
+- **Progressive Disclosure:** Fluxo guiado para evitar fadiga de decisão: `Tamanho` ➔ `Recheios` ➔ `Extras`.
+- **UX de Conversão:** Micro-interações táteis e botões de "Combo Rápido" para diminuir o tempo de checkout.
+
+---
+
+## 🛠️ Pilares de Engenharia (Checklist)
+
+- [x] **Performance:** Otimizar imagens para WebP (redução de overhead).
+- [x] **Clean Code:** Nomenclatura semântica seguindo o padrão **learnTECH**.
+- [x] **Mobile-First:** Interface focada na ergonomia do polegar (touch).
+
+---
+
+## 🚀 Plano de Ação: Cronograma de Execução
+
+### 🏗️ Fase 1: Arquitetura & Database (Semana 1)
+
+- [ ] Setup do Laravel 11 + Breeze + Vue 3 (Inertia).
+- [ ] Modelagem do Schema (SQLite/MySQL) para `products`, `categories` e `orders`.
+- [ ] Implementação da lógica de trava de 3 adicionais gratuitos no Backend.
+
+#### 🏗️ Execução
+
+Item 2: Modelagem de Dados (Inteligência)
+criar as tabelas que vão sustentar o catálogo do Açaí Garagem
+
+📂 Criar: Migrations de Negócio
+Precisamos criar as tabelas de Produtos e Categorias (e possivelmente uma de Adicionais). Como você está usando Laravel, vamos gerar essas migrations agora.
+
+1. Criar a Migration de Categorias
+No seu terminal (dentro da pasta do projeto), execute:
+
+Bash
+php artisan make:model Category -m
+php artisan make:model Product -m
+
+Isso criará o Model e a Migration. No arquivo da migration, adicione: os trechos corretos
+
+Depois execute para criar no banco de dados
+
+Bash
+php artisan migrate
+
+Isso fará com que as novas tabelas apareçam no seu phpMyAdmin.
 
 
-### 🚀 Tópico 01: Configuração do Ambiente no Computador
-Para desenvolver com Vue (Frontend) e Laravel (Backend) sem conflitos, seu computador precisa falar essas três linguagens fluentemente. Vamos garantir os "pilares":
+📊 Criar: Seeding de Dados
+Assim que as tabelas existirem, vamos criar os Seeders. É aqui que vamos inserir "na força bruta" (via código) os itens que você listou no inventário:
 
-1. O Servidor Local (PHP & MySQL/SQLite)
-O Laragon já está instalado, mas precisamos garantir que ele "mande" no terminal:
+Os tamanhos de Açaí (300ml a 700ml) com seus respectivos preços.
 
-Abra o Laragon > Botão Direito > PHP > Quick Settings > Add Laragon to PATH.
+Os salgados a R$ 9,50.
 
-Faça o mesmo para o Composer se a opção estiver disponível.
+Os sucos e vitaminas.
 
-Teste: Abra um novo terminal e digite php -v. Se aparecer "PHP 8.3", o primeiro pilar está ok.
+Bash
+php artisan migrate:refresh --seed
 
-2. O Motor do Frontend (Node.js & NPM)
-O Laravel 11 + Vue utiliza o Vite para compilar o código em milissegundos. Para isso, você precisa do Node.js:
+---
 
-Baixe a versão LTS do Node.js.
+### 🎨 Fase 2: Frontend & Visual Builder (Semana 2)
 
-Teste: No terminal, digite node -v e npm -v.
+- [ ] Configuração do Tailwind CSS com o Guia de Estilo oficial.
+- [ ] Desenvolvimento do componente de montagem em camadas (Visual Builder).
+- [ ] Criação do stepper de compra: `Tamanho` ➔ `Recheios` ➔ `Adicionais`.
 
-3. Extensões Indispensáveis no VS Code
-Para você ter produtividade de Sênior, instale estas extensões agora:
+#### 🏗️ Execução
 
-Volar: Essencial para suporte ao Vue 3.
+1. Criar a Rota e o Controller (O "Garçom")
+No Laravel, precisamos de um Controller que busque esses produtos no banco e os entregue para a página Vue.
 
-Tailwind CSS IntelliSense: Para o auto-complete das classes de design.
+Ação sugerida: Criar o ProductController.
 
-PHP Intelephense: Para o Laravel não ficar "cheio de erros" vermelhos no editor.
+Bash
+php artisan make:controller ProductController
 
-Verificação de Prontidão
-Antes de passarmos para o próximo tópico (Instalação Clean), preciso que você confirme:
+2. Desenvolver a Vitrine (O "Cardápio")
+Agora vamos para o Vue 3. Vamos criar um componente que:
 
-O comando php -v retorna a versão 8.2 ou 8.3?
+Liste as categorias em um Sticky Header (conforme o plano de UX).
 
-O comando node -v retorna uma versão (ex: v20 ou v22)?
+Exiba os produtos em Cards arredondados com os preços que acabamos de inserir.
 
-O comando composer -v mostra o logo do Composer no terminal?
+3. Implementar o Visual Builder (O "Diferencial")
+Começaremos a lógica para o usuário escolher o tamanho do açaí e selecionar os 3 acompanhamentos grátis.
+
+### 🔗 Fase 3: Integração & Checkout (Semana 3)
+
+- [ ] Gestão de estado do carrinho (Pinia ou Reactive API).
+- [ ] Desenvolvimento do **WhatsApp Payload Parser** (JSON para Texto formatado).
+- [ ] Sistema de controle de disponibilidade em tempo real.
+
+### 🚀 Fase 4: Deploy & QA (Semana 4)
+
+- [ ] Testes de usabilidade em dispositivos móveis reais (iOS/Android).
+- [ ] Otimização final de assets e remoção de overhead de código.
+- [ ] Deploy em produção com SSL e treinamento operacional.
+ 
+---
+
+## ⚠️ Riscos e Mitigação
+
+| Risco                | Impacto | Estratégia de Mitigação                                               |
+| :------------------- | :------ | :-------------------------------------------------------------------- |
+| **Lentidão em 4G**   | Baixo   | Uso de CSS enxuto e carregamento lazy de imagens.                     |
+| **Erro na Montagem** | Alto    | Validação no Frontend impedindo o checkout sem os itens obrigatórios. |
+
+---
+
+> **Lembrete de Gestão:** Verificar sempre se a **BU** (Business Unit) está correta antes de realizar o deploy das alterações.
