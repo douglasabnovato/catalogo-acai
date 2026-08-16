@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { menuData, type MenuItem } from '../../entities/menu/model/menu.data';
 import { AcaiBuilderModal } from '../../features/order/ui/AcaiBuilderModal';
-import { ShoppingBag, Utensils, Sparkles, PhoneCall, Check, ChevronRight, Flame, Coffee, Sandwich, Star, Home } from 'lucide-react';
+import { supabase } from '../../shared/api/supabase';
+import { ShoppingBag, Utensils, Sparkles, PhoneCall, Check, ChevronRight, Flame, Coffee, Sandwich, Star, Home, PartyPopper } from 'lucide-react';
 
 interface CartItem {
   name: string;
@@ -14,7 +15,11 @@ export const CardapioPage = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [orderSuccess, setOrderSuccess] = useState(false);
+
+  // Estados do Formulário de Checkout
   const [customerName, setCustomerName] = useState('');
+  const [customerPhone, setCustomerPhone] = useState('');
   const [deliveryType, setDeliveryType] = useState<'delivery' | 'retirada'>('delivery');
   const [address, setAddress] = useState('');
 
@@ -40,22 +45,50 @@ export const CardapioPage = () => {
 
   const totalPrice = cart.reduce((sum, item) => sum + item.price, 0);
 
-  const sendWhatsAppOrder = () => {
+  const sendWhatsAppOrder = async () => {
     if (cart.length === 0) return;
-    if (!customerName.trim()) {
-      alert('Por favor, informe seu nome para o pedido.');
+
+    if (!customerName.trim() || !customerPhone.trim()) {
+      alert('Por favor, informe seu Nome e Telefone/WhatsApp.');
+      return;
+    }
+    if (deliveryType === 'delivery' && !address.trim()) {
+      alert('Por favor, informe o endereço completo e referência para a entrega.');
       return;
     }
 
+    // 1. Salvar o pedido no banco de dados do Supabase
+    try {
+      const { error } = await supabase.from('orders').insert([
+        {
+          customer_name: customerName,
+          customer_phone: customerPhone,
+          delivery_type: deliveryType,
+          address: deliveryType === 'delivery' ? address : 'Retirada no Balcão',
+          items: cart,
+          total_amount: totalPrice,
+        }
+      ]);
+
+      if (error) {
+        console.error('Erro ao registrar pedido no banco:', error);
+      }
+    } catch (err) {
+      console.error('Falha de conexão ao salvar pedido:', err);
+    }
+
+    // 2. Montar mensagem formatada e abrir o WhatsApp
     const phoneNumber = '5532988367667'; // Substitua pelo número real da Garagem
     let text = `*NOVO PEDIDO - GARAGEM LANCHES* 🍔\n\n`;
     text += `👤 *Cliente:* ${customerName}\n`;
+    text += `📞 *WhatsApp:* ${customerPhone}\n`;
     text += `📍 *Tipo:* ${deliveryType === 'delivery' ? 'Entrega em Casa' : 'Retirada no Balcão'}\n`;
-    if (deliveryType === 'delivery') {
-      text += `🏠 *Endereço:* ${address}\n`;
-    }
-    text += `\n*ITENS DO PEDIDO:*\n`;
 
+    if (deliveryType === 'delivery') {
+      text += `🏠 *Endereço/Referência:* ${address}\n`;
+    }
+
+    text += `\n*ITENS DO PEDIDO:*\n`;
     cart.forEach((item, index) => {
       text += `${index + 1}. *${item.name}* - R$ ${item.price.toFixed(2)}\n`;
       if (item.details) text += `   _Obs: ${item.details}_\n`;
@@ -65,6 +98,11 @@ export const CardapioPage = () => {
 
     const encoded = encodeURIComponent(text);
     window.open(`https://wa.me/${phoneNumber}?text=${encoded}`, '_blank');
+
+    // 3. Resetar estado, limpar carrinho e exibir tela de sucesso
+    setCart([]);
+    setIsCheckoutOpen(false);
+    setOrderSuccess(true);
   };
 
   const categories = [
@@ -79,8 +117,8 @@ export const CardapioPage = () => {
 
   return (
     <div className="min-h-screen bg-[#09090b] text-zinc-100 pb-32 selection:bg-amber-400 selection:text-zinc-950">
-      
-      {/* HEADER PREMIUM (Estilo App de Delivery) */}
+
+      {/* HEADER PREMIUM */}
       <header className="sticky top-0 z-40 bg-zinc-950/90 backdrop-blur-md border-b border-zinc-800/80 px-4 py-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -94,7 +132,7 @@ export const CardapioPage = () => {
               </p>
             </div>
           </div>
-          
+
           <a
             href="https://wa.me/5532988367667?text=Olá!%20Gostaria%20de%20tirar%20dúvidas%20sobre%20o%20cardápio."
             target="_blank"
@@ -106,6 +144,34 @@ export const CardapioPage = () => {
         </div>
       </header>
 
+      {/* MODAL DE SUCESSO APÓS O ENVIO */}
+      {orderSuccess && (
+        <div className="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-fade-in">
+          <div className="bg-zinc-900 border border-amber-400/30 w-full max-w-sm rounded-3xl p-6 shadow-2xl text-center space-y-4">
+            <div className="w-16 h-16 bg-amber-400/10 border border-amber-400/30 rounded-full flex items-center justify-center mx-auto text-amber-400">
+              <PartyPopper size={32} />
+            </div>
+            <div>
+              <h3 className="text-lg font-black text-white">Pedido Enviado com Sucesso!</h3>
+              <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                Seu pedido foi registrado e enviado para o nosso WhatsApp. Já estamos preparando tudo com capricho!
+              </p>
+            </div>
+            <button
+              onClick={() => {
+                setOrderSuccess(false);
+                setCustomerName('');
+                setCustomerPhone('');
+                setAddress('');
+              }}
+              className="w-full bg-amber-400 hover:bg-amber-500 text-zinc-950 py-3 rounded-2xl font-black text-xs uppercase tracking-wider transition-all shadow-lg shadow-amber-500/20"
+            >
+              Fazer Novo Pedido
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* CARROSSEL DE CATEGORIAS */}
       <nav className="sticky top-[73px] z-30 bg-[#09090b]/95 backdrop-blur border-b border-zinc-800/60 py-3 px-4">
         <div className="max-w-4xl mx-auto flex gap-2 overflow-x-auto no-scrollbar pb-1">
@@ -116,11 +182,10 @@ export const CardapioPage = () => {
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap transition-all border ${
-                  isActive
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap transition-all border ${isActive
                     ? 'bg-amber-400 border-amber-400 text-zinc-950 shadow-lg shadow-amber-500/20 scale-105'
                     : 'bg-zinc-900/80 border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800'
-                }`}
+                  }`}
               >
                 <Icon size={14} />
                 {cat.label}
@@ -160,11 +225,10 @@ export const CardapioPage = () => {
                 </span>
                 <button
                   onClick={() => handleQuickAdd(item)}
-                  className={`px-4 py-2 rounded-2xl text-xs font-bold transition-all flex items-center gap-1.5 ${
-                    item.category === 'acai'
+                  className={`px-4 py-2 rounded-2xl text-xs font-bold transition-all flex items-center gap-1.5 ${item.category === 'acai'
                       ? 'bg-purple-950/80 border border-purple-500/50 text-purple-200 hover:bg-purple-900 shadow-lg shadow-purple-950/50'
                       : 'bg-emerald-500 hover:bg-emerald-600 text-zinc-950 shadow-lg shadow-emerald-500/20'
-                  }`}
+                    }`}
                 >
                   <Sparkles size={14} />
                   {item.category === 'acai' ? 'Montar Copo' : 'Adicionar'}
@@ -208,7 +272,7 @@ export const CardapioPage = () => {
         </div>
       )}
 
-      {/* MODAL DE CHECKOUT / FINALIZAÇÃO */}
+      {/* MODAL DE CHECKOUT COM DADOS DO CLIENTE */}
       {isCheckoutOpen && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
           <div className="bg-zinc-900 border border-zinc-800 w-full max-w-md rounded-3xl p-6 shadow-2xl flex flex-col max-h-[90vh] overflow-y-auto">
@@ -216,7 +280,7 @@ export const CardapioPage = () => {
 
             <div className="space-y-4">
               <div>
-                <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider block mb-1">Seu Nome:</label>
+                <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider block mb-1">Seu Nome Completo *</label>
                 <input
                   type="text"
                   value={customerName}
@@ -227,25 +291,34 @@ export const CardapioPage = () => {
               </div>
 
               <div>
+                <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider block mb-1">WhatsApp / Telefone *</label>
+                <input
+                  type="text"
+                  value={customerPhone}
+                  onChange={(e) => setCustomerPhone(e.target.value)}
+                  placeholder="(32) 99999-9999"
+                  className="w-full bg-zinc-800 border border-zinc-700 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400"
+                />
+              </div>
+
+              <div>
                 <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider block mb-1">Tipo de Atendimento:</label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={() => setDeliveryType('delivery')}
-                    className={`py-2.5 rounded-2xl text-xs font-bold border transition-all ${
-                      deliveryType === 'delivery'
+                    className={`py-2.5 rounded-2xl text-xs font-bold border transition-all ${deliveryType === 'delivery'
                         ? 'bg-amber-400 border-amber-400 text-zinc-950'
                         : 'bg-zinc-800 border-zinc-700 text-zinc-300'
-                    }`}
+                      }`}
                   >
                     Entrega em Casa
                   </button>
                   <button
                     onClick={() => setDeliveryType('retirada')}
-                    className={`py-2.5 rounded-2xl text-xs font-bold border transition-all ${
-                      deliveryType === 'retirada'
+                    className={`py-2.5 rounded-2xl text-xs font-bold border transition-all ${deliveryType === 'retirada'
                         ? 'bg-amber-400 border-amber-400 text-zinc-950'
                         : 'bg-zinc-800 border-zinc-700 text-zinc-300'
-                    }`}
+                      }`}
                   >
                     Retirada no Balcão
                   </button>
@@ -254,7 +327,7 @@ export const CardapioPage = () => {
 
               {deliveryType === 'delivery' && (
                 <div>
-                  <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider block mb-1">Endereço Completo:</label>
+                  <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider block mb-1">Endereço Completo e Referência *</label>
                   <textarea
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
@@ -299,17 +372,6 @@ export const CardapioPage = () => {
           </div>
         </div>
       )}
-
-      {/* BOTÃO FLUTUANTE RÁPIDO DO WHATSAPP */}
-      <a
-        href="https://wa.me/5532988367667?text=Olá!%20Gostaria%20de%20falar%20com%20o%20atendimento."
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-24 right-4 bg-[#25D366] hover:bg-[#20ba5a] text-white p-3.5 rounded-full shadow-2xl flex items-center justify-center transition-all transform hover:scale-110 z-30"
-        title="Fale conosco via WhatsApp"
-      >
-        <PhoneCall size={22} />
-      </a>
 
     </div>
   );
