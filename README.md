@@ -1,4 +1,4 @@
-# 🍔 Garagem Lanches & Açaí — Cardápio Digital Interativo
+# 🍔 Garagem Cardápio 
 
 <div align="center">
 
