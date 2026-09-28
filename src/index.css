@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* Cores da marca como tokens do Tailwind v4 (o tailwind.config.js não é lido na v4) */
+@theme {
+  --color-brand-yellow: #ffc72c;
+  --color-brand-green: #34d399;
+  --color-brand-purple: #6b2d8c;
+}
+
 @layer base {
   :root {
     --brand-yellow: #FFC72C;
@@ -25,4 +32,17 @@ html, body, #root {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+/* Foco visível em todos os controles (WCAG 2.4.7) */
+:focus-visible {
+  outline: 3px solid #ffc72c;
+  outline-offset: 2px;
+}
+
+/* Respeita quem pediu menos movimento no sistema */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }

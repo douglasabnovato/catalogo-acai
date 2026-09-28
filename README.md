@@ -30,8 +30,8 @@ O projeto foi estruturado com base no material físico e promocional da lanchone
 ## ✨ Principais Funcionalidades
 
 * 📱 **Cardápio por Categorias:** Navegação rápida entre Açaís, Salgados, Sanduíches, Combos, Sucos/Vitaminas e itens Para Casa.
-* 🥣 **Construtor de Açaí Artesanal:** Modal interativo para escolha de tamanhos, acompanhamentos em camadas (leite em pó, granola, paçoca, frutas, caldas) e adição opcional de Whey Protein.
-* 🛒 **Carrinho Flutuante e Resumo:** Acompanhamento em tempo real dos itens selecionados com cálculo automático do valor total.
+* 🥣 **Construtor de Açaí Artesanal:** Modal interativo com 3 acompanhamentos inclusos, adicionais a partir do 4º com preço visível e adição opcional de Whey Protein.
+* 🛒 **Carrinho Flutuante e Editável:** Acompanhamento em tempo real, com ajuste de quantidade e remoção de itens antes de enviar.
 * 📋 **Checkout Inteligente:** Coleta de dados essenciais do cliente (Nome Completo, WhatsApp/Telefone, tipo de atendimento entre Entrega em Casa ou Retirada no Balcão, e Endereço com Referência).
 * 🗄️ **Persistência no Supabase:** Registro automático e seguro de cada pedido em banco de dados relacional PostgreSQL via Supabase em tempo real.
 * 💬 **Disparo via WhatsApp:** Formatação automática de uma mensagem limpa e profissional contendo todos os dados do cliente e os itens do pedido, abrindo diretamente no canal de atendimento da lanchonete.
@@ -43,11 +43,51 @@ O projeto foi estruturado com base no material físico e promocional da lanchone
 
 Este projeto foi construído utilizando tecnologias modernas de desenvolvimento web:
 
-* **React 18** + **TypeScript** (Desenvolvimento de componentes tipados)
+* **React 19** + **TypeScript** (Desenvolvimento de componentes tipados)
 * **Vite** (Empacotador de alta performance)
 * **Tailwind CSS v4** (Estilização utilitária avançada)
 * **Lucide React** (Biblioteca de ícones modernos)
 * **Supabase** (Banco de dados relacional e políticas de segurança RLS)
+* **Vitest** + **Testing Library** (13 testes de regras e fluxo)
+
+---
+
+## ▶️ Como executar
+
+```bash
+npm install
+cp .env.example .env     # preencha VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY (opcional)
+npm run dev              # http://localhost:5173
+npm test                 # 13 testes
+npm run build            # gera docs/ para o GitHub Pages
+```
+
+Sem o `.env`, o cardápio funciona e envia os pedidos só pelo WhatsApp.
+
+### Supabase
+
+Rode [documentacao/supabase-orders.sql](./documentacao/supabase-orders.sql) no SQL Editor. Ele cria a tabela `orders` com validações e deixa o site **apenas inserir** pedidos; a leitura fica restrita a usuários autenticados da loja, protegendo nomes, telefones e endereços dos clientes.
+
+### Publicação gratuita (GitHub Pages)
+
+`npm run build` (com o `.env` preenchido) e commit da pasta `docs/`. Em *Settings → Pages*, use a branch `main` e a pasta `/docs`. O build usa caminhos relativos e funciona em `usuario.github.io/repositorio/`. Passo a passo completo: [documentacao/DEPLOY.md](documentacao/DEPLOY.md).
+
+**Demonstração:** https://douglasabnovato.github.io/catalogo-acai/
+
+---
+
+## 📊 Estado do MVP & Documentação
+
+| Documento | Conteúdo |
+|---|---|
+| [documentacao/ANALISE.md](./documentacao/ANALISE.md) | Requisitos, diagnóstico, rubrica e BDD |
+| [documentacao/ARQUITETURA.md](./documentacao/ARQUITETURA.md) | C4, FSD, modelo de dados e ADRs |
+| [documentacao/PLANO-DE-ACAO.md](./documentacao/PLANO-DE-ACAO.md) | Tarefas priorizadas por MoSCoW |
+
+| Momento | Nota MVP | Situação |
+|---|---|---|
+| Antes (27/09/2026) | 4,54 | Reprovado — carrinho sem remoção, adicionais cobrados sem aviso e modais inacessíveis |
+| Depois (27/09/2026) | 8,48 | Aprovado |
 
 ---
  
