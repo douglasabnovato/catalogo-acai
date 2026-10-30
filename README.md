@@ -33,7 +33,7 @@ O projeto foi estruturado com base no material físico e promocional da lanchone
 * 🥣 **Construtor de Açaí Artesanal:** Modal interativo com 3 acompanhamentos inclusos, adicionais a partir do 4º com preço visível e adição opcional de Whey Protein.
 * 🛒 **Carrinho Flutuante e Editável:** Acompanhamento em tempo real, com ajuste de quantidade e remoção de itens antes de enviar.
 * 📋 **Checkout Inteligente:** Coleta de dados essenciais do cliente (Nome Completo, WhatsApp/Telefone, tipo de atendimento entre Entrega em Casa ou Retirada no Balcão, e Endereço com Referência).
-* 🗄️ **Persistência no Supabase:** Registro automático e seguro de cada pedido em banco de dados relacional PostgreSQL via Supabase em tempo real.
+* 🗄️ **Persistência opcional no Supabase:** O código registra os pedidos quando as variáveis estão configuradas. O site publicado hoje não as usa, então os pedidos seguem só pelo WhatsApp.
 * 💬 **Disparo via WhatsApp:** Formatação automática de uma mensagem limpa e profissional contendo todos os dados do cliente e os itens do pedido, abrindo diretamente no canal de atendimento da lanchonete.
 * 🎉 **Tela de Sucesso e Reset:** Feedback visual após o envio do pedido e retorno imediato ao cardápio pronto para novos atendimentos.
 
@@ -59,7 +59,7 @@ npm install
 cp .env.example .env     # preencha VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY (opcional)
 npm run dev              # http://localhost:5173
 npm test                 # 13 testes
-npm run build            # gera docs/ para o GitHub Pages
+npm run build            # gera o build em docs/
 ```
 
 Sem o `.env`, o cardápio funciona e envia os pedidos só pelo WhatsApp.
@@ -68,11 +68,11 @@ Sem o `.env`, o cardápio funciona e envia os pedidos só pelo WhatsApp.
 
 Rode [documentacao/supabase-orders.sql](./documentacao/supabase-orders.sql) no SQL Editor. Ele cria a tabela `orders` com validações e deixa o site **apenas inserir** pedidos; a leitura fica restrita a usuários autenticados da loja, protegendo nomes, telefones e endereços dos clientes.
 
-### Publicação gratuita (GitHub Pages)
+### Publicação
 
-`npm run build` (com o `.env` preenchido) e commit da pasta `docs/`. Em *Settings → Pages*, use a branch `main` e a pasta `/docs`. O build usa caminhos relativos e funciona em `usuario.github.io/repositorio/`. Passo a passo completo: [documentacao/DEPLOY.md](documentacao/DEPLOY.md).
+O site está na Vercel. O GitHub Pages está desligado. Detalhes em [documentacao/DEPLOY.md](documentacao/DEPLOY.md).
 
-**Demonstração:** https://douglasabnovato.github.io/catalogo-acai/
+**Demonstração:** https://catalogo-acai.vercel.app
 
 ---
 
@@ -82,7 +82,9 @@ Rode [documentacao/supabase-orders.sql](./documentacao/supabase-orders.sql) no S
 |---|---|
 | [documentacao/ANALISE.md](./documentacao/ANALISE.md) | Requisitos, diagnóstico, rubrica e BDD |
 | [documentacao/ARQUITETURA.md](./documentacao/ARQUITETURA.md) | C4, FSD, modelo de dados e ADRs |
-| [documentacao/PLANO-DE-ACAO.md](./documentacao/PLANO-DE-ACAO.md) | Tarefas priorizadas por MoSCoW |
+| [documentacao/PLANO-DE-ACAO.md](./documentacao/PLANO-DE-ACAO.md) | Histórico das tarefas de 27/09/2026 |
+| [documentacao/AVALIACAO.md](./documentacao/AVALIACAO.md) | Evidências e achados de 30/10/2026 |
+| [documentacao/PLANO-ESTRATEGICO.md](./documentacao/PLANO-ESTRATEGICO.md) | Plano vigente e execução |
 
 | Momento | Nota MVP | Situação |
 |---|---|---|

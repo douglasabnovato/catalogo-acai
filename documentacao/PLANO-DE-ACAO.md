@@ -1,5 +1,7 @@
 # Plano de ação — Garagem Lanches (catalogo-acai)
 
+> Histórico de 27/09/2026. O plano vigente é `PLANO-ESTRATEGICO.md`.
+
 | # | Prioridade | Tarefa | Defeito | Critério | Esforço | Status |
 |---|---|---|---|---|---|---|
 | T01 | Must | Carrinho com quantidade e remoção (reducer puro) | D1 | C1 | 2 | ✅ Feito |

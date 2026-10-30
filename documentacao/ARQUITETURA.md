@@ -1,10 +1,12 @@
-# Arquitetura alvo — Garagem Lanches (catalogo-acai)
+# Arquitetura — Garagem Lanches (catalogo-acai)
+
+> Atualizada em 30/10/2026. O site está na Vercel, sem Supabase configurado no build publicado.
 
 ## 1. Visão C4
 
 ```mermaid
 flowchart LR
-  C([Cliente no celular]) --> SPA[Cardápio React 19 + Vite 8<br/>GitHub Pages]
+  C([Cliente no celular]) --> SPA[Cardápio React 19 + Vite 8<br/>Vercel]
   SPA -->|wa.me com pedido formatado| W[WhatsApp da loja]
   SPA -->|INSERT orders · chave anon + RLS| S[(Supabase Postgres)]
   L([Equipe da loja]) --> W
@@ -35,7 +37,7 @@ src/
 │   └── ui/Dialog.tsx                    (novo) modal acessível
 └── test/setup.ts                        Vitest + jest-dom
 documentacao/                            análise, arquitetura, plano e SQL do Supabase
-docs/                                    build publicado no GitHub Pages (gerado)
+docs/                                    saída do build; o GitHub Pages está desligado
 ```
 
 Regra de dependência do FSD: `pages → features → entities → shared`, nunca o contrário.
@@ -91,6 +93,12 @@ Regra de dependência do FSD: `pages → features → entities → shared`, nunc
 
 - **Decisão:** a regra de R$ 2,00 por acompanhamento a partir do 4º foi mantida, mas agora aparece no subtítulo do modal e no valor final.
 - **Consequência:** preço transparente. **Confirme o valor com a loja** (o código original marcava como "exemplo").
+
+### ADR-006 — Publicar na Vercel
+
+- **Contexto:** o endereço do repositório aponta para a Vercel, e o GitHub Pages responde 404.
+- **Decisão:** registrar a Vercel como hospedagem atual. A configuração dela não está no repositório.
+- **Consequência:** `docs/` deixou de ter função clara e deve sair depois de conferir o painel da Vercel.
 
 ## 5. Fora do escopo
 
