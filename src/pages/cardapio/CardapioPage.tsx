@@ -2,10 +2,10 @@
  * CardapioPage.tsx · cardápio da Garagem Lanches: categorias, montagem de açaí, carrinho editável
  * e checkout que envia o pedido pelo WhatsApp (canal principal) e o registra no Supabase quando configurado.
  */
-import { useReducer, useState, type FormEvent } from 'react';
+import { useEffect, useReducer, useState, type FormEvent } from 'react';
 import { ShoppingBag, Utensils, Sparkles, PhoneCall, Check, ChevronRight, Flame, Coffee, Sandwich, Star, Home, PartyPopper, Minus, Plus, Trash2 } from 'lucide-react';
 import { menuData, type MenuItem } from '../../entities/menu/model/menu.data';
-import { cartReducer, cartTotal, cartCount } from '../../entities/cart/model/cart';
+import { cartReducer, cartTotal, cartCount, loadCart, saveCart } from '../../entities/cart/model/cart';
 import { AcaiBuilderModal } from '../../features/order/ui/AcaiBuilderModal';
 import { buildWhatsAppMessage, validateCheckout, whatsAppUrl, phoneDigits, type CheckoutErrors, type CheckoutForm } from '../../features/order/model/order';
 import { supabase } from '../../shared/api/supabase';
@@ -42,13 +42,16 @@ async function saveOrder(form: CheckoutForm, lines: ReturnType<typeof cartReduce
 /* Página única do cardápio. */
 export const CardapioPage = () => {
   const [selectedAcai, setSelectedAcai] = useState<MenuItem | null>(null);
-  const [cart, dispatch] = useReducer(cartReducer, []);
+  const [cart, dispatch] = useReducer(cartReducer, undefined, () => loadCart());
   const [activeCategory, setActiveCategory] = useState('all');
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [sentUrl, setSentUrl] = useState<string | null>(null);
   const [form, setForm] = useState<CheckoutForm>(EMPTY_FORM);
   const [errors, setErrors] = useState<CheckoutErrors>({});
   const [announcement, setAnnouncement] = useState('');
+
+  /* Mantém o pedido ao recarregar ou voltar do WhatsApp sem ter enviado. */
+  useEffect(() => saveCart(cart), [cart]);
 
   const filteredItems = activeCategory === 'all' ? menuData : menuData.filter((item) => item.category === activeCategory);
   const totalCents = cartTotal(cart);

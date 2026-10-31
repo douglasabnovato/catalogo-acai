@@ -11,6 +11,23 @@ describe('CardapioPage', () => {
     vi.spyOn(window, 'open').mockReturnValue(null);
   });
 
+  it('mantém o pedido ao recarregar a página e limpa depois do envio', async () => {
+    const user = userEvent.setup();
+    const { unmount } = render(<CardapioPage />);
+    await user.click(screen.getByRole('button', { name: 'Adicionar: Esfirra Carne' }));
+    unmount();
+
+    render(<CardapioPage />);
+    expect(screen.getByText('1 item no pedido')).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /Ver pedido/ }));
+    const dialog = screen.getByRole('dialog', { name: 'Seu pedido' });
+    await user.type(within(dialog).getByLabelText(/Seu nome/), 'Ana Lima');
+    await user.type(within(dialog).getByLabelText(/WhatsApp/), '(32) 99999-0000');
+    await user.click(within(dialog).getByRole('button', { name: 'Retirada no balcão' }));
+    await user.click(within(dialog).getByRole('button', { name: /Enviar no WhatsApp/ }));
+    expect(localStorage.getItem('garagem-carrinho')).toBeNull();
+  });
+
   it('adiciona itens, ajusta quantidade e envia o pedido validado', async () => {
     const user = userEvent.setup();
     render(<CardapioPage />);
