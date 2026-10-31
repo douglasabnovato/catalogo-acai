@@ -1,5 +1,7 @@
 # Deploy · Garagem Cardápio (catalogo-acai)
 
+> **Atualização de 30/10/2026:** o site está em https://catalogo-acai.vercel.app, e o GitHub Pages está desligado. O passo a passo abaixo é o histórico da publicação planejada para o Pages. O RLS da etapa 1 continua obrigatório antes de ligar o Supabase.
+
 Plano de ação para publicar o cardápio em hospedagem gratuita.
 
 ## 1. Desafio
