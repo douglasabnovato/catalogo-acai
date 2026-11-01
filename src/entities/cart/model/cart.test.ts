@@ -2,9 +2,23 @@
  * cart.test.ts · reducer do carrinho e totais em centavos.
  */
 import { describe, expect, it } from 'vitest';
-import { cartReducer, cartTotal, cartCount } from './cart';
+import { cartReducer, cartTotal, cartCount, loadCart, saveCart } from './cart';
 
 const esfirra = { name: 'Esfirra Carne', unitCents: 950, details: '' };
+
+describe('carrinho salvo', () => {
+  const line = { key: 'a', name: 'Esfirra', details: '', unitCents: 500, quantity: 2 };
+
+  it('recupera o que foi salvo e ignora o que venceu ou está inválido', () => {
+    saveCart([line], 1000);
+    expect(loadCart(2000)).toEqual([line]);
+    expect(loadCart(1000 + 13 * 60 * 60 * 1000)).toEqual([]);
+    localStorage.setItem('garagem-carrinho', '{"savedAt":1000,"lines":[{"name":"x"}]}');
+    expect(loadCart(2000)).toEqual([]);
+    localStorage.setItem('garagem-carrinho', 'não é json');
+    expect(loadCart(2000)).toEqual([]);
+  });
+});
 
 describe('cartReducer', () => {
   it('agrupa itens iguais e soma a quantidade', () => {
