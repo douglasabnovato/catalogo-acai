@@ -16,7 +16,7 @@
 | 2 | Hipótese a validar | Existe uma aposta escrita, com meta | Parcial: meta proposta, sem confirmação da loja |
 | 3 | Fluxo principal completo | Uma pessoa conclui sem ajuda | Parcial: testado por automação; envio real não testado para não gerar pedido falso |
 | 4 | Escopo enxuto | O que não entra está registrado | Atende: o WhatsApp é o único canal do MVP |
-| 5 | Medição de uso | A métrica principal é coletada | Não atende: nada coleta uso |
+| 5 | Medição de uso | A métrica principal é coletada | Parcial: toque em enviar registrado no código, sem dado pessoal; meta de 30% dos acessos; falta a conta do GoatCounter (#7) |
 | 6 | Falhas tratadas | Erro, vazio e carregamento têm resposta clara | Atende: formulário validado, carrinho vazio e pop-up bloqueado têm resposta; a persistência do carrinho está em PR |
 | 7 | Desempenho aceitável | LCP de até 2,5 s no celular | Não medido neste ciclo |
 | 8 | Acessibilidade básica | Lighthouse e teclado | Parcial: leitor de tela, foco e rótulos tratados no código; teclado não testado de ponta a ponta |
@@ -34,7 +34,7 @@
 | 1 | Manter o carrinho ao recarregar | PR aberto |
 | 2 | Remover de `docs/` o build que nada publica | PR aberto |
 | 3 | Confirmar com a loja o preço de R$ 2,00 por adicional e o WhatsApp | Com o responsável (#3) |
-| 4 | Definir a coleta da métrica | Com o responsável |
+| 4 | Coletar a métrica com o GoatCounter: sem cookies, evento `pedido-enviado` e meta proposta de 30% dos acessos | Código pronto; falta a conta (#7) |
 | 5 | Testar um pedido real com a loja | Com o responsável |
 
 ## 3. Fora do MVP
