@@ -26,3 +26,6 @@ dist-ssr
 # ambiente e artefatos de build do TypeScript
 .env
 *.tsbuildinfo
+
+# Build gerado: a Vercel publica a partir do código
+docs
