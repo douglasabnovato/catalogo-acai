@@ -92,4 +92,9 @@ O site está na Vercel. O GitHub Pages está desligado. Detalhes em [documentaca
 | Depois (27/09/2026) | 8,48 | Aprovado |
 
 ---
- 
+
+## Próximos passos do responsável
+
+- Confirmar com a loja o preço de R$ 2,00 por adicional e o número do WhatsApp.
+
+Acompanhamento na issue #3.
