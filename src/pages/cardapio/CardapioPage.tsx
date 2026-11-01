@@ -12,6 +12,7 @@ import { supabase } from '../../shared/api/supabase';
 import { Dialog } from '../../shared/ui/Dialog';
 import { formatBRL, toCents } from '../../shared/lib/money';
 import { STORE } from '../../shared/config/store';
+import { trackEvent } from '../../shared/lib/metrics';
 
 const CATEGORIES = [
   { id: 'all', label: 'Todos', icon: Flame },
@@ -87,6 +88,7 @@ export const CardapioPage = () => {
     }
     const url = whatsAppUrl(buildWhatsAppMessage(form, cart));
     window.open(url, '_blank', 'noopener');
+    trackEvent('pedido-enviado');
     void saveOrder(form, cart).catch((error) => console.error('Falha ao registrar pedido:', error));
     dispatch({ type: 'clear' });
     setIsCheckoutOpen(false);

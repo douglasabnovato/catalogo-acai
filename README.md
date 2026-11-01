@@ -96,5 +96,6 @@ O site está na Vercel. O GitHub Pages está desligado. Detalhes em [documentaca
 ## Próximos passos do responsável
 
 - Confirmar com a loja o preço de R$ 2,00 por adicional e o número do WhatsApp.
+- Criar uma conta gratuita no [GoatCounter](https://www.goatcounter.com/) e definir `VITE_GOATCOUNTER_CODE` no ambiente de build, com o código da conta. Sem isso, os eventos não são enviados.
 
-Acompanhamento na issue #3.
+Acompanhamento nas issues #3 e #7.

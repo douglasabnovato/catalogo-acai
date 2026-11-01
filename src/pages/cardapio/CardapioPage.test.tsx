@@ -30,6 +30,8 @@ describe('CardapioPage', () => {
 
   it('adiciona itens, ajusta quantidade e envia o pedido validado', async () => {
     const user = userEvent.setup();
+    const count = vi.fn();
+    window.goatcounter = { count };
     render(<CardapioPage />);
     await user.click(screen.getByRole('button', { name: 'Adicionar: Esfirra Carne' }));
     await user.click(screen.getByRole('button', { name: 'Adicionar: Esfirra Carne' }));
@@ -50,6 +52,7 @@ describe('CardapioPage', () => {
     await user.click(within(dialog).getByRole('button', { name: /Enviar no WhatsApp/ }));
 
     expect(window.open).toHaveBeenCalledTimes(1);
+    expect(count).toHaveBeenCalledWith({ path: 'pedido-enviado', title: 'pedido-enviado', event: true });
     const url = decodeURIComponent(String(vi.mocked(window.open).mock.calls[0][0]));
     expect(url).toContain('1x *Esfirra Carne*');
     expect(screen.getByRole('dialog', { name: 'Pedido pronto para envio!' })).toBeInTheDocument();
