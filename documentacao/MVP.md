@@ -18,8 +18,8 @@
 | 4 | Escopo enxuto | O que não entra está registrado | Atende: o WhatsApp é o único canal do MVP |
 | 5 | Medição de uso | A métrica principal é coletada | Parcial: toque em enviar registrado no código, sem dado pessoal; meta de 30% dos acessos; falta a conta do GoatCounter (#7) |
 | 6 | Falhas tratadas | Erro, vazio e carregamento têm resposta clara | Atende: formulário validado, carrinho vazio e pop-up bloqueado têm resposta; a persistência do carrinho está em PR |
-| 7 | Desempenho aceitável | LCP de até 2,5 s no celular | Não medido neste ciclo |
-| 8 | Acessibilidade básica | Lighthouse e teclado | Parcial: leitor de tela, foco e rótulos tratados no código; teclado não testado de ponta a ponta |
+| 7 | Desempenho aceitável | LCP de até 2,5 s no celular | Atende: mediana de 1,58 s no site publicado (3 execuções), CLS 0 |
+| 8 | Acessibilidade básica | Lighthouse e teclado | Atende: Lighthouse 100, axe sem violações e foco visível em todos os elementos alcançados por Tab (30 elementos) |
 | 9 | Segurança e conformidade | Riscos decididos; termos de terceiros cumpridos | Parcial: sem dado pessoal gravado; aviso de uso dos dados na tela |
 | 10 | Entrega confiável | Publicação só depois de CI verde | Parcial: a Vercel publica a `main` sem esperar o CI; `main` sem proteção |
 | 11 | Testes dos fluxos críticos | Testes automatizados no CI | Atende: regras e fluxo principal no CI |
@@ -40,3 +40,7 @@
 ## 3. Fora do MVP
 
 Gravar pedidos no Supabase: **a decisão proposta é não ligar no MVP**, porque o WhatsApp já entrega o pedido à loja e gravar dados pessoais exigiria mais cuidado com LGPD. O código continua pronto. Também ficam fora pagamento online e painel da loja. A lista é uma proposta e pode mudar com a decisão do responsável.
+
+## Medições de 02/11/2026
+
+Mediana do LCP de 1,58 s (1,58, 1,81 e 1,28 s), desempenho 100, acessibilidade 100. Lighthouse 12.8.2 local, perfil móvel simulado, sem aparelho real.
