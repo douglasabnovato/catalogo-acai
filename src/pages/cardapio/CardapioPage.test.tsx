@@ -72,6 +72,34 @@ describe('CardapioPage', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
+  it('pede troco válido no dinheiro e leva pagamento e observação ao WhatsApp', async () => {
+    const user = userEvent.setup();
+    render(<CardapioPage />);
+    await user.click(screen.getByRole('button', { name: 'Adicionar: Esfirra Carne' }));
+    await user.click(screen.getByRole('button', { name: /Ver pedido/ }));
+    const dialog = screen.getByRole('dialog', { name: 'Seu pedido' });
+    await user.type(within(dialog).getByLabelText(/Seu nome/), 'Ana Lima');
+    await user.type(within(dialog).getByLabelText(/WhatsApp/), '(32) 99999-0000');
+    await user.click(within(dialog).getByRole('button', { name: 'Retirada no balcão' }));
+    expect(within(dialog).getByRole('button', { name: 'Pix' })).toHaveAttribute('aria-pressed', 'true');
+    expect(within(dialog).queryByLabelText(/Troco para/)).not.toBeInTheDocument();
+
+    await user.click(within(dialog).getByRole('button', { name: 'Dinheiro' }));
+    await user.type(within(dialog).getByLabelText(/Troco para/), '5');
+    await user.click(within(dialog).getByRole('button', { name: /Enviar no WhatsApp/ }));
+    expect(window.open).not.toHaveBeenCalled();
+    expect(within(dialog).getByLabelText(/Troco para/)).toHaveFocus();
+    expect(within(dialog).getByText(/O troco precisa ser para R\$\s9,50 ou mais/)).toBeInTheDocument();
+
+    await user.clear(within(dialog).getByLabelText(/Troco para/));
+    await user.type(within(dialog).getByLabelText(/Troco para/), '20');
+    await user.type(within(dialog).getByLabelText(/Observações/), 'Bem quente');
+    await user.click(within(dialog).getByRole('button', { name: /Enviar no WhatsApp/ }));
+    const url = decodeURIComponent(String(vi.mocked(window.open).mock.calls[0][0]));
+    expect(url).toMatch(/\*Pagamento:\* Dinheiro \(troco para R\$\s20,00\)/);
+    expect(url).toContain('*Observações:* Bem quente');
+  });
+
   it('filtra por categoria', async () => {
     const user = userEvent.setup();
     render(<CardapioPage />);

@@ -33,6 +33,7 @@ O projeto foi estruturado com base no material físico e promocional da lanchone
 * 🥣 **Construtor de Açaí Artesanal:** Modal interativo com 3 acompanhamentos inclusos, adicionais a partir do 4º com preço visível e adição opcional de Whey Protein.
 * 🛒 **Carrinho Flutuante e Editável:** Acompanhamento em tempo real, com ajuste de quantidade e remoção de itens antes de enviar.
 * 📋 **Checkout Inteligente:** Coleta de dados essenciais do cliente (Nome Completo, WhatsApp/Telefone, tipo de atendimento entre Entrega em Casa ou Retirada no Balcão, e Endereço com Referência).
+* 💳 **Pagamento e observação:** O cliente escolhe Pix, cartão ou dinheiro (com "troco para", que não aceita valor menor que o total) e pode deixar uma observação. Tudo vai na mensagem do WhatsApp; o pagamento é feito com a loja.
 * 🗄️ **Persistência opcional no Supabase:** O código registra os pedidos quando as variáveis estão configuradas. O site publicado hoje não as usa, então os pedidos seguem só pelo WhatsApp.
 * 💬 **Disparo via WhatsApp:** Formatação automática de uma mensagem limpa e profissional contendo todos os dados do cliente e os itens do pedido, abrindo diretamente no canal de atendimento da lanchonete.
 * 🎉 **Tela de Sucesso e Reset:** Feedback visual após o envio do pedido e retorno imediato ao cardápio pronto para novos atendimentos.
@@ -48,7 +49,7 @@ Este projeto foi construído utilizando tecnologias modernas de desenvolvimento 
 * **Tailwind CSS v4** (Estilização utilitária avançada)
 * **Lucide React** (Biblioteca de ícones modernos)
 * **Supabase** (Banco de dados relacional e políticas de segurança RLS)
-* **Vitest** + **Testing Library** (13 testes de regras e fluxo)
+* **Vitest** + **Testing Library** (23 testes de regras e fluxo)
 
 ---
 
@@ -58,7 +59,7 @@ Este projeto foi construído utilizando tecnologias modernas de desenvolvimento 
 npm install
 cp .env.example .env     # preencha VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY (opcional)
 npm run dev              # http://localhost:5173
-npm test                 # 13 testes
+npm test                 # 23 testes
 npm run build            # gera o build em docs/
 ```
 
@@ -82,7 +83,8 @@ O site está na Vercel. O GitHub Pages está desligado. Detalhes em [documentaca
 |---|---|
 | [documentacao/ANALISE.md](./documentacao/ANALISE.md) | Requisitos, diagnóstico, rubrica e BDD |
 | [documentacao/ARQUITETURA.md](./documentacao/ARQUITETURA.md) | C4, FSD, modelo de dados e ADRs |
-| [documentacao/PLANO-DE-ACAO.md](./documentacao/PLANO-DE-ACAO.md) | Histórico das tarefas de 27/09/2026 |
+| [documentacao/MVP.md](./documentacao/MVP.md) | Estado do MVP: 7 de 12 critérios, N2, Finalizado: sim |
+| [documentacao/PLANO-DE-ACAO.md](./documentacao/PLANO-DE-ACAO.md) | Tarefas de 27/09/2026 e ciclo de 03/11/2026 (pesquisa, produto e engenharia) |
 | [documentacao/AVALIACAO.md](./documentacao/AVALIACAO.md) | Evidências e achados de 30/10/2026 |
 | [documentacao/PLANO-ESTRATEGICO.md](./documentacao/PLANO-ESTRATEGICO.md) | Plano vigente e execução |
 
@@ -93,9 +95,18 @@ O site está na Vercel. O GitHub Pages está desligado. Detalhes em [documentaca
 
 ---
 
-## Próximos passos do responsável
+## Próximos passos
 
-- Confirmar com a loja o preço de R$ 2,00 por adicional e o número do WhatsApp.
-- Criar uma conta gratuita no [GoatCounter](https://www.goatcounter.com/) e definir `VITE_GOATCOUNTER_CODE` no ambiente de build, com o código da conta. Sem isso, os eventos não são enviados.
+**Do responsável**
 
-Acompanhamento nas issues #3 e #7.
+- Confirmar com a loja o preço de R$ 2,00 por adicional e o número do WhatsApp (#3).
+- Criar uma conta gratuita no [GoatCounter](https://www.goatcounter.com/) e definir `VITE_GOATCOUNTER_CODE` no ambiente de build da Vercel. Sem isso, os eventos não são enviados (#7).
+- Fazer um pedido real com a loja, confirmar as formas de pagamento e a meta de 30% (#16).
+- Proteger a `main` e publicar na Vercel só depois do CI verde (#21).
+
+**Do código**
+
+- Busca por nome no cardápio (#17).
+- Checagem de acessibilidade com axe no CI (#18).
+- Lighthouse no CI com orçamento de LCP (#19).
+- Dependabot para npm e GitHub Actions (#20).
