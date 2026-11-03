@@ -20,8 +20,8 @@
 | 4 | Escopo enxuto | O que não entra está registrado | Atende: seção 3; o WhatsApp é o único canal |
 | 5 | Medição de uso | A métrica principal é coletada | Parcial: evento `pedido-enviado` no código (`src/shared/lib/metrics.ts`, com teste); falta a conta do GoatCounter (#7) |
 | 6 | Falhas tratadas | Erro, vazio e carregamento têm resposta clara | Atende: formulário validado com foco no erro, troco menor que o total recusado, carrinho vazio, pop-up bloqueado com link de reserva, carrinho mantido ao recarregar (PR #5) |
-| 7 | Desempenho aceitável | LCP de até 2,5 s no celular | Atende: ver "Medições de 03/11/2026" |
-| 8 | Acessibilidade básica | Lighthouse e teclado | Atende: ver "Medições de 03/11/2026"; campos novos com rótulo, erro ligado por `aria-describedby` e botões com `aria-pressed` |
+| 7 | Desempenho aceitável | LCP de até 2,5 s no celular | Atende: mediana de 1,30 s no site publicado (3 execuções, 03/11) |
+| 8 | Acessibilidade básica | Lighthouse e teclado | Atende: Lighthouse 100 nas 3 execuções de 03/11; campos novos com rótulo, erro ligado por `aria-describedby` e botões com `aria-pressed` |
 | 9 | Segurança e conformidade | Riscos decididos; termos de terceiros cumpridos | Parcial: o site publicado não grava dado pessoal; aviso de uso dos dados na tela; a observação pede para não escrever senha nem cartão. Ligar o Supabase segue decisão do responsável (#3) |
 | 10 | Entrega confiável | Publicação só depois de CI verde | Parcial: CI em PR e push para `main` e `developer/**` (desde 03/11); a Vercel publica a `main` sem esperar o CI e a `main` está sem proteção (#21) |
 | 11 | Testes dos fluxos críticos | Testes automatizados no CI | Atende: 23 testes Vitest (regras, carrinho, medição e página) em `npm test`, no CI |
@@ -51,3 +51,7 @@ Gravar pedidos no Supabase: **a decisão proposta é não ligar no MVP**, porque
 ## Medições de 02/11/2026
 
 Mediana do LCP de 1,58 s (1,58, 1,81 e 1,28 s), desempenho 100, acessibilidade 100. Lighthouse 12.8.2 local, perfil móvel simulado, sem aparelho real.
+
+## Medições de 03/11/2026
+
+Site publicado depois do PR #23 (bundle com o checkout novo). Mediana do LCP de 1,30 s (1,49, 1,28 e 1,30 s), desempenho 96 (96, 87 e 99), acessibilidade 100 nas 3 execuções. Lighthouse 12.8.2 local, perfil móvel simulado, sem aparelho real.
