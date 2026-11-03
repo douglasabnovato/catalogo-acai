@@ -6,15 +6,37 @@ import { formatBRL } from '../../../shared/lib/money';
 import { type CartLine, cartTotal } from '../../../entities/cart/model/cart';
 
 export type DeliveryType = 'delivery' | 'retirada';
+export type PaymentMethod = 'pix' | 'cartao' | 'dinheiro';
 
 export interface CheckoutForm {
   name: string;
   phone: string;
   deliveryType: DeliveryType;
   address: string;
+  /* Como o cliente pretende pagar; o pagamento acontece fora do site. */
+  payment?: PaymentMethod;
+  /* "Troco para" em reais, só no dinheiro; vazio = sem troco. */
+  changeFor?: string;
+  /* Observação livre (ex.: sem cebola, interfone quebrado). */
+  notes?: string;
 }
 
-export type CheckoutErrors = Partial<Record<'name' | 'phone' | 'address', string>>;
+export type CheckoutErrors = Partial<Record<'name' | 'phone' | 'address' | 'changeFor' | 'notes', string>>;
+
+export const PAYMENT_LABELS: Record<PaymentMethod, string> = {
+  pix: 'Pix',
+  cartao: 'Cartão na entrega/retirada',
+  dinheiro: 'Dinheiro',
+};
+
+export const NOTES_MAX = 200;
+
+/* Converte "50", "50,00" ou "R$ 50,5" em centavos; devolve null se não for um valor. */
+export function parseBRLToCents(value: string): number | null {
+  const clean = value.replace(/R\$|\s/g, '').replace(/\./g, '').replace(',', '.');
+  if (!/^\d+(\.\d{1,2})?$/.test(clean)) return null;
+  return Math.round(Number(clean) * 100);
+}
 
 /* Preço do copo: base + adicionais acima dos inclusos + whey. */
 export function acaiPriceCents(baseCents: number, toppingsCount: number, hasWhey: boolean): number {
@@ -27,8 +49,8 @@ export function phoneDigits(phone: string): string {
   return phone.replace(/\D/g, '');
 }
 
-/* Valida o formulário; telefone com DDD (10 ou 11 dígitos). */
-export function validateCheckout(form: CheckoutForm): CheckoutErrors {
+/* Valida o formulário; telefone com DDD (10 ou 11 dígitos); troco nunca menor que o total. */
+export function validateCheckout(form: CheckoutForm, totalCents = 0): CheckoutErrors {
   const errors: CheckoutErrors = {};
   if (form.name.trim().length < 3) errors.name = 'Informe seu nome.';
   const digits = phoneDigits(form.phone);
@@ -36,6 +58,13 @@ export function validateCheckout(form: CheckoutForm): CheckoutErrors {
   if (form.deliveryType === 'delivery' && form.address.trim().length < 8) {
     errors.address = 'Informe rua, número, bairro e um ponto de referência.';
   }
+  const change = form.changeFor?.trim() ?? '';
+  if (form.payment === 'dinheiro' && change) {
+    const cents = parseBRLToCents(change);
+    if (cents === null) errors.changeFor = 'Informe o valor do troco em reais, por exemplo 50,00.';
+    else if (cents < totalCents) errors.changeFor = `O troco precisa ser para ${formatBRL(totalCents)} ou mais.`;
+  }
+  if ((form.notes?.trim().length ?? 0) > NOTES_MAX) errors.notes = `Use até ${NOTES_MAX} caracteres.`;
   return errors;
 }
 
@@ -49,6 +78,9 @@ export function buildWhatsAppMessage(form: CheckoutForm, lines: CartLine[]): str
     `*Tipo:* ${form.deliveryType === 'delivery' ? 'Entrega em casa' : 'Retirada no balcão'}`,
   ];
   if (form.deliveryType === 'delivery') rows.push(`*Endereço/Referência:* ${form.address.trim()}`);
+  if (form.payment) rows.push(`*Pagamento:* ${paymentText(form)}`);
+  const notes = form.notes?.trim();
+  if (notes) rows.push(`*Observações:* ${notes}`);
   rows.push('', '*ITENS DO PEDIDO:*');
   lines.forEach((line, index) => {
     rows.push(`${index + 1}. ${line.quantity}x *${line.name}* - ${formatBRL(line.unitCents * line.quantity)}`);
@@ -56,6 +88,14 @@ export function buildWhatsAppMessage(form: CheckoutForm, lines: CartLine[]): str
   });
   rows.push('', `*TOTAL A PAGAR: ${formatBRL(cartTotal(lines))}*`);
   return rows.join('\n');
+}
+
+/* Texto do pagamento; no dinheiro, diz se precisa de troco e para quanto. */
+export function paymentText(form: CheckoutForm): string {
+  if (!form.payment) return '';
+  if (form.payment !== 'dinheiro') return PAYMENT_LABELS[form.payment];
+  const cents = parseBRLToCents(form.changeFor?.trim() ?? '');
+  return cents === null ? 'Dinheiro (sem troco)' : `Dinheiro (troco para ${formatBRL(cents)})`;
 }
 
 /* Link wa.me com o texto codificado. */

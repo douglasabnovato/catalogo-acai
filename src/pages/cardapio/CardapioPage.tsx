@@ -7,7 +7,7 @@ import { ShoppingBag, Utensils, Sparkles, PhoneCall, Check, ChevronRight, Flame,
 import { menuData, type MenuItem } from '../../entities/menu/model/menu.data';
 import { cartReducer, cartTotal, cartCount, loadCart, saveCart } from '../../entities/cart/model/cart';
 import { AcaiBuilderModal } from '../../features/order/ui/AcaiBuilderModal';
-import { buildWhatsAppMessage, validateCheckout, whatsAppUrl, phoneDigits, type CheckoutErrors, type CheckoutForm } from '../../features/order/model/order';
+import { buildWhatsAppMessage, validateCheckout, whatsAppUrl, phoneDigits, PAYMENT_LABELS, NOTES_MAX, type CheckoutErrors, type CheckoutForm, type PaymentMethod } from '../../features/order/model/order';
 import { supabase } from '../../shared/api/supabase';
 import { Dialog } from '../../shared/ui/Dialog';
 import { formatBRL, toCents } from '../../shared/lib/money';
@@ -24,7 +24,8 @@ const CATEGORIES = [
   { id: 'takeaway', label: 'Para Casa', icon: Home },
 ];
 
-const EMPTY_FORM: CheckoutForm = { name: '', phone: '', deliveryType: 'delivery', address: '' };
+const EMPTY_FORM: CheckoutForm = { name: '', phone: '', deliveryType: 'delivery', address: '', payment: 'pix', changeFor: '', notes: '' };
+const PAYMENTS = Object.keys(PAYMENT_LABELS) as PaymentMethod[];
 
 /* Grava o pedido no Supabase sem bloquear o cliente; falha fica só no console. */
 async function saveOrder(form: CheckoutForm, lines: ReturnType<typeof cartReducer>) {
@@ -80,7 +81,7 @@ export const CardapioPage = () => {
   const submitOrder = (event: FormEvent) => {
     event.preventDefault();
     if (cart.length === 0) return;
-    const found = validateCheckout(form);
+    const found = validateCheckout(form, totalCents);
     setErrors(found);
     if (Object.keys(found).length > 0) {
       document.getElementById(`checkout-${Object.keys(found)[0]}`)?.focus();
@@ -291,6 +292,39 @@ export const CardapioPage = () => {
                 {errors.address && <p id="checkout-address-error" className="text-xs text-red-300 mt-1">{errors.address}</p>}
               </div>
             )}
+
+            <fieldset>
+              <legend className="text-xs font-bold text-zinc-300 uppercase tracking-wider block mb-1">Forma de pagamento</legend>
+              <div className="grid grid-cols-3 gap-2">
+                {PAYMENTS.map((method) => (
+                  <button key={method} type="button" aria-pressed={form.payment === method} onClick={() => { updateField('payment', method); setErrors((current) => ({ ...current, changeFor: undefined })); }}
+                    className={`py-2.5 px-1 rounded-2xl text-xs font-bold border transition-all ${form.payment === method ? 'bg-amber-400 border-amber-400 text-zinc-950' : 'bg-zinc-800 border-zinc-600 text-zinc-200'}`}>
+                    {PAYMENT_LABELS[method]}
+                  </button>
+                ))}
+              </div>
+              <p className="text-[11px] text-zinc-400 mt-1">O pagamento é feito com a loja, na entrega ou na retirada.</p>
+            </fieldset>
+
+            {form.payment === 'dinheiro' && (
+              <div>
+                <label htmlFor="checkout-changeFor" className="text-xs font-bold text-zinc-300 uppercase tracking-wider block mb-1">Troco para (opcional)</label>
+                <input id="checkout-changeFor" type="text" inputMode="decimal" value={form.changeFor} onChange={(e) => updateField('changeFor', e.target.value)}
+                  aria-invalid={Boolean(errors.changeFor)} aria-describedby={errors.changeFor ? 'checkout-changeFor-error' : undefined}
+                  placeholder="Ex.: 50,00 (deixe vazio se não precisa)" className={inputClass(Boolean(errors.changeFor))} />
+                {errors.changeFor && <p id="checkout-changeFor-error" className="text-xs text-red-300 mt-1">{errors.changeFor}</p>}
+              </div>
+            )}
+
+            <div>
+              <label htmlFor="checkout-notes" className="text-xs font-bold text-zinc-300 uppercase tracking-wider block mb-1">Observações (opcional)</label>
+              <textarea id="checkout-notes" rows={2} maxLength={NOTES_MAX} value={form.notes} onChange={(e) => updateField('notes', e.target.value)}
+                aria-invalid={Boolean(errors.notes)} aria-describedby={errors.notes ? 'checkout-notes-error' : 'checkout-notes-hint'}
+                placeholder="Ex.: sem leite condensado, tocar o interfone" className={`${inputClass(Boolean(errors.notes))} resize-none`} />
+              {errors.notes
+                ? <p id="checkout-notes-error" className="text-xs text-red-300 mt-1">{errors.notes}</p>
+                : <p id="checkout-notes-hint" className="text-[11px] text-zinc-400 mt-1">Até {NOTES_MAX} caracteres. Não escreva senhas nem dados de cartão.</p>}
+            </div>
 
             <p className="text-[11px] text-zinc-400">
               Seus dados são usados só para preparar e entregar este pedido pela {STORE.name}.
