@@ -95,18 +95,24 @@ O site está na Vercel. O GitHub Pages está desligado. Detalhes em [documentaca
 
 ---
 
-## Próximos passos
+## Estado e próximos passos (ciclo de 03/11/2026)
 
-**Do responsável**
+No ar em https://catalogo-acai.vercel.app (HTTP 200 em 06/11/2026). Nível Vitrine (N2): 7 de 12 critérios atendidos, Finalizado: sim. Os 5 parciais dependem do responsável.
 
-- Confirmar com a loja o preço de R$ 2,00 por adicional e o número do WhatsApp (#3).
-- Criar uma conta gratuita no [GoatCounter](https://www.goatcounter.com/) e definir `VITE_GOATCOUNTER_CODE` no ambiente de build da Vercel. Sem isso, os eventos não são enviados (#7).
-- Fazer um pedido real com a loja, confirmar as formas de pagamento e a meta de 30% (#16).
-- Proteger a `main` e publicar na Vercel só depois do CI verde (#21).
+**O que foi feito**
 
-**Do código**
+- Forma de pagamento (Pix, cartão ou dinheiro), troco validado e observação no pedido, enviados na mensagem do WhatsApp (PR #22).
+- CI também nos PRs e pushes para `developer/**` (PR #22).
+- Evento `pedido-enviado` pronto para o GoatCounter, sem dado pessoal (PR #10).
+- Medições no site publicado: LCP mediano de 1,30 s e acessibilidade 100 (PR #24).
+- Ciclo de 03/11/2026 com pesquisa, produto e engenharia no plano de ação (PR #22).
 
-- Busca por nome no cardápio (#17).
-- Checagem de acessibilidade com axe no CI (#18).
-- Lighthouse no CI com orçamento de LCP (#19).
-- Dependabot para npm e GitHub Actions (#20).
+**O que queremos fazer**
+
+- Do responsável: confirmar o preço dos adicionais e o WhatsApp da loja (#3), criar a conta de medição (#7), fazer um pedido real e confirmar a meta de 30% (#16) e proteger a `main` (#21).
+- Do código: busca por nome no cardápio (#17), axe no CI (#18), Lighthouse no CI com orçamento de LCP (#19) e Dependabot para npm e GitHub Actions (#20).
+
+**Onde está a documentação**
+
+- [documentacao/MVP.md](documentacao/MVP.md): critérios, evidências e medições.
+- [documentacao/PLANO-DE-ACAO.md](documentacao/PLANO-DE-ACAO.md): seção "Ciclo de 03/11/2026", com pesquisa, produto e engenharia.
