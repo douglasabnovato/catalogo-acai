@@ -97,7 +97,7 @@ O site está na Vercel. O GitHub Pages está desligado. Detalhes em [documentaca
 
 ## Estado e próximos passos (ciclo de 03/11/2026)
 
-No ar em https://catalogo-acai.vercel.app (HTTP 200 em 06/11/2026). Nível Vitrine (N2): 7 de 12 critérios atendidos, Finalizado: sim. Os 5 parciais dependem do responsável.
+No ar em https://catalogo-acai.vercel.app (HTTP 200 em 06/11/2026). Nível Vitrine (N2): 7 de 12 critérios atendidos, Finalizado: sim. Os 5 parciais dependem do responsável. A `main` está protegida desde 10/11/2026; no critério 10 falta a Vercel esperar o CI.
 
 **O que foi feito**
 
@@ -109,7 +109,7 @@ No ar em https://catalogo-acai.vercel.app (HTTP 200 em 06/11/2026). Nível Vitri
 
 **O que queremos fazer**
 
-- Do responsável: confirmar o preço dos adicionais e o WhatsApp da loja (#3), criar a conta de medição (#7), fazer um pedido real e confirmar a meta de 30% (#16) e proteger a `main` (#21).
+- Do responsável: confirmar o preço dos adicionais e o WhatsApp da loja (#3), criar a conta de medição (#7), fazer um pedido real e confirmar a meta de 30% (#16) e fazer a Vercel publicar só depois do CI (#21; a proteção da `main` saiu em 10/11/2026).
 - Do código: busca por nome no cardápio (#17), axe no CI (#18), Lighthouse no CI com orçamento de LCP (#19) e Dependabot para npm e GitHub Actions (#20).
 
 **Onde está a documentação**
