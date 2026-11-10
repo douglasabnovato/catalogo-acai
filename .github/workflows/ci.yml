@@ -38,3 +38,28 @@ jobs:
 
       - name: Executar Build
         run: npm run build
+
+  e2e:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do Repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Instalar Dependências
+        run: npm ci
+
+      - name: Gerar Build para o Teste
+        run: npm run build
+
+      - name: Instalar o Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Executar o Fluxo Principal
+        run: npm run test:e2e
