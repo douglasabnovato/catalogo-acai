@@ -1,6 +1,10 @@
 # MVP — Garagem Lanches
 
-> Criado em 31/10/2026, com os critérios usados no `movies`. Revisto em 03/11/2026 (ciclo de 03/11, `PLANO-DE-ACAO.md`).
+> Criado em 31/10/2026, com os critérios usados no `movies`. Revisto em 03/11/2026 (ciclo de 03/11, `PLANO-DE-ACAO.md`). Critério 10 revisto em 10/11/2026.
+
+**Resumo:** 7 de 12 aplicáveis atendidos
+
+**Finalizado:** sim
 
 ## Problema e hipótese
 
@@ -23,7 +27,7 @@
 | 7 | Desempenho aceitável | LCP de até 2,5 s no celular | Atende: mediana de 1,30 s no site publicado (3 execuções, 03/11) |
 | 8 | Acessibilidade básica | Lighthouse e teclado | Atende: Lighthouse 100 nas 3 execuções de 03/11; campos novos com rótulo, erro ligado por `aria-describedby` e botões com `aria-pressed` |
 | 9 | Segurança e conformidade | Riscos decididos; termos de terceiros cumpridos | Parcial: o site publicado não grava dado pessoal; aviso de uso dos dados na tela; a observação pede para não escrever senha nem cartão. Ligar o Supabase segue decisão do responsável (#3) |
-| 10 | Entrega confiável | Publicação só depois de CI verde | Parcial: CI em PR e push para `main` e `developer/**` (desde 03/11); a Vercel publica a `main` sem esperar o CI e a `main` está sem proteção (#21) |
+| 10 | Entrega confiável | Publicação só depois de CI verde | Parcial: a `main` está protegida (`gh api repos/douglasabnovato/catalogo-acai/rulesets` em 10/11/2026: ruleset `principal-protegida` ativo, exige PR, bloqueia force push e exclusão) e o workflow `CI` roda em PR e push para `main` e `developer/**`; falta a Vercel publicar só depois do CI verde (#21) |
 | 11 | Testes dos fluxos críticos | Testes automatizados no CI | Atende: 23 testes Vitest (regras, carrinho, medição e página) em `npm test`, no CI |
 | 12 | Documentação honesta | Qualquer pessoa roda o projeto, e os números estão certos | Atende: README, este documento e `PLANO-DE-ACAO.md` revistos em 03/11 |
 
@@ -41,7 +45,7 @@
 | 4 | Confirmar com a loja o preço de R$ 2,00 por adicional e o WhatsApp | Com o responsável (#3) |
 | 5 | Coletar a métrica com o GoatCounter: sem cookies, evento `pedido-enviado`, meta proposta de 30% dos acessos | Código pronto; falta a conta (#7) |
 | 6 | Testar um pedido real com a loja e confirmar a meta | Com o responsável (#16) |
-| 7 | Proteger a `main` e publicar só com CI verde | Com o responsável (#21) |
+| 7 | Proteger a `main` e publicar só com CI verde | Proteção feita em 10/11/2026; a Vercel esperar o CI segue com o responsável (#21) |
 | 8 | Busca, axe e Lighthouse no CI, Dependabot | Próximos passos (#17, #18, #19, #20) |
 
 ## 3. Fora do MVP
