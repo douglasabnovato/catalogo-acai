@@ -49,6 +49,9 @@ export const AcaiBuilderModal = ({ item, onClose, onAddToCart }: AcaiBuilderModa
           <p className="text-xs text-zinc-400 mt-0.5">
             {STORE.freeToppings} acompanhamentos inclusos; a partir do {STORE.freeToppings + 1}º, {formatBRL(STORE.extraToppingCents)} cada.
           </p>
+          <p className="text-[11px] text-amber-300 mt-1" role="note">
+            Valor dos adicionais ilustrativo, ainda não confirmado com a loja.
+          </p>
         </div>
         <button
           type="button"

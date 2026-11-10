@@ -95,12 +95,15 @@ O site está na Vercel. O GitHub Pages está desligado. Detalhes em [documentaca
 
 ---
 
-## Estado e próximos passos (ciclo de 03/11/2026)
+## Estado e próximos passos (ciclo de 10/11/2026)
 
-No ar em https://catalogo-acai.vercel.app (HTTP 200 em 06/11/2026). Nível Vitrine (N2): 7 de 12 critérios atendidos, Finalizado: sim. Os 5 parciais dependem do responsável. A `main` está protegida desde 10/11/2026; no critério 10 falta a Vercel esperar o CI.
+No ar em https://catalogo-acai.vercel.app (HTTP 200 em 10/11/2026). Nível Vitrine (N2): 11 de 12 critérios atendidos, Finalizado: sim. Falta só a conta do GoatCounter, do responsável (#7). A `main` exige o job `build-and-test` verde desde 10/11/2026.
 
 **O que foi feito**
 
+- GoatCounter ligado ao código `douglasabnovato`, só no site publicado (ciclo de 10/11/2026).
+- Fluxo principal no navegador com Playwright e job `e2e` no CI: `npm run build && npm run test:e2e` (ciclo de 10/11/2026).
+- Valor dos adicionais marcado como ilustrativo até a loja confirmar (ciclo de 10/11/2026).
 - Forma de pagamento (Pix, cartão ou dinheiro), troco validado e observação no pedido, enviados na mensagem do WhatsApp (PR #22).
 - CI também nos PRs e pushes para `developer/**` (PR #22).
 - Evento `pedido-enviado` pronto para o GoatCounter, sem dado pessoal (PR #10).
@@ -109,7 +112,7 @@ No ar em https://catalogo-acai.vercel.app (HTTP 200 em 06/11/2026). Nível Vitri
 
 **O que queremos fazer**
 
-- Do responsável: confirmar o preço dos adicionais e o WhatsApp da loja (#3), criar a conta de medição (#7), fazer um pedido real e confirmar a meta de 30% (#16) e fazer a Vercel publicar só depois do CI (#21; a proteção da `main` saiu em 10/11/2026).
+- Do responsável: criar a conta do GoatCounter com o código `douglasabnovato` (#7), confirmar o preço dos adicionais e o WhatsApp da loja (#3), fazer um pedido real e revisar a meta de 30% (#16) e incluir o job `e2e` nos checks obrigatórios (#21).
 - Do código: busca por nome no cardápio (#17), axe no CI (#18), Lighthouse no CI com orçamento de LCP (#19) e Dependabot para npm e GitHub Actions (#20).
 
 **Onde está a documentação**
