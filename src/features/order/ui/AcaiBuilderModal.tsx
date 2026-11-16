@@ -57,7 +57,7 @@ export const AcaiBuilderModal = ({ item, onClose, onAddToCart }: AcaiBuilderModa
           type="button"
           onClick={onClose}
           aria-label="Fechar"
-          className="p-2 rounded-full bg-zinc-800 text-zinc-300 hover:text-white transition-colors"
+          className="w-11 h-11 shrink-0 flex items-center justify-center rounded-full bg-zinc-800 text-zinc-300 hover:text-white transition-colors"
         >
           <X size={18} aria-hidden="true" />
         </button>

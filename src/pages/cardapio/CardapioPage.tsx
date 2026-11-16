@@ -233,16 +233,17 @@ export const CardapioPage = () => {
                     {line.details && <p className="text-zinc-400">{line.details}</p>}
                     <p className="font-mono text-amber-400">{formatBRL(line.unitCents * line.quantity)}</p>
                   </div>
+                  {/* Alvos de 44×44 px (WCAG 2.5.5), para tocar com uma mão no celular */}
                   <div className="flex items-center gap-1 shrink-0">
-                    <button type="button" onClick={() => dispatch({ type: 'decrement', key: line.key })} aria-label={`Diminuir ${line.name}`} className="p-1.5 rounded-lg bg-zinc-800 text-zinc-200">
-                      <Minus size={14} aria-hidden="true" />
+                    <button type="button" onClick={() => dispatch({ type: 'decrement', key: line.key })} aria-label={`Diminuir ${line.name}`} className="w-11 h-11 flex items-center justify-center rounded-xl bg-zinc-800 text-zinc-200">
+                      <Minus size={16} aria-hidden="true" />
                     </button>
                     <span className="w-6 text-center font-mono" aria-label={`Quantidade: ${line.quantity}`}>{line.quantity}</span>
-                    <button type="button" onClick={() => dispatch({ type: 'increment', key: line.key })} aria-label={`Aumentar ${line.name}`} className="p-1.5 rounded-lg bg-zinc-800 text-zinc-200">
-                      <Plus size={14} aria-hidden="true" />
+                    <button type="button" onClick={() => dispatch({ type: 'increment', key: line.key })} aria-label={`Aumentar ${line.name}`} className="w-11 h-11 flex items-center justify-center rounded-xl bg-zinc-800 text-zinc-200">
+                      <Plus size={16} aria-hidden="true" />
                     </button>
-                    <button type="button" onClick={() => dispatch({ type: 'remove', key: line.key })} aria-label={`Remover ${line.name}`} className="p-1.5 rounded-lg bg-zinc-800 text-red-300">
-                      <Trash2 size={14} aria-hidden="true" />
+                    <button type="button" onClick={() => dispatch({ type: 'remove', key: line.key })} aria-label={`Remover ${line.name}`} className="w-11 h-11 flex items-center justify-center rounded-xl bg-zinc-800 text-red-300">
+                      <Trash2 size={16} aria-hidden="true" />
                     </button>
                   </div>
                 </li>

@@ -1,0 +1,15 @@
+# Atualizações semanais de versão. Os alertas de segurança são ligados em Settings (issue do responsável).
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      patch-e-minor:
+        update-types: ["minor", "patch"]
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"

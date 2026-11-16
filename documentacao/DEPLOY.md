@@ -1,73 +1,56 @@
 # Deploy · Garagem Cardápio (catalogo-acai)
 
-> **Atualização de 30/10/2026:** o site está em https://catalogo-acai.vercel.app, e o GitHub Pages está desligado. O passo a passo abaixo é o histórico da publicação planejada para o Pages. O RLS da etapa 1 continua obrigatório antes de ligar o Supabase.
+> Revisto em 16/11/2026. O site está na Vercel, em https://catalogo-acai.vercel.app. O GitHub Pages está desligado desde 30/10/2026. O passo a passo antigo, do Pages, ficou no histórico do Git.
 
-Plano de ação para publicar o cardápio em hospedagem gratuita.
+## Como funciona hoje
 
-## 1. Desafio
+| Peça | Onde | Quem mexe |
+|---|---|---|
+| Código | branch `main` | Só por PR, com os jobs `build-and-test` e `e2e` verdes (ruleset `principal-protegida`) |
+| Build | Vercel, a cada push na `main` | Automático |
+| Configuração do build | `vercel.json` no repositório: `npm ci`, `npm run build`, saída em `docs/` | Agente, por PR |
+| Conta, projeto e domínio da Vercel | Painel da Vercel | Só o responsável |
+| Supabase | Desligado no MVP (seção 3 do `MVP.md`) | Só o responsável |
+| GoatCounter | Código `douglasabnovato`, carregado só no site publicado | Conta do responsável (#7) |
 
-Publicar um cardápio em React + Vite que grava pedidos no Supabase e envia pelo WhatsApp, sem expor dados de clientes e sem custo.
+O `vercel.json` repete o que a tela de Settings da Vercel já usava: pasta de saída `docs` (definida em `vite.config.ts`). Se a tela tiver outro valor, o arquivo vence. O preview da Vercel no PR confirma.
 
-## 2. Conteúdo
+## Passo a passo para o responsável
 
-### Decisão de hospedagem
+### 1. Conferir a publicação depois do merge na `main`
 
-| Opção | Resultado |
-|---|---|
-| **GitHub Pages servindo a pasta `/docs` da `main` (escolhida, já era o desenho do projeto)** | Gratuito, sem conta extra; o build é gerado localmente com o `.env` e versionado em `docs/` |
-| Render Static Site com build na nuvem | Evitaria versionar o build, mas mudaria o endereço público que o projeto já usa |
+1. Abrir https://vercel.com e entrar no projeto `catalogo-acai`.
+2. Aba **Deployments**: o último deploy de **Production** deve ser o commit do merge, com estado **Ready**.
+3. Abrir https://catalogo-acai.vercel.app no celular: o cardápio aparece, e os botões de quantidade do carrinho estão maiores (44×44 px).
 
-### Por que o RLS vem antes da publicação
+### 2. Se o deploy falhar
 
-A chave `anon` do Supabase vai dentro do JavaScript do site: qualquer pessoa pode lê-la. Quem protege os dados é o **Row Level Security**. Sem ele, um visitante consegue listar nomes, telefones e endereços dos outros clientes (LGPD). O script `documentacao/supabase-orders.sql` deixa o visitante **apenas inserir** pedidos.
+1. Em **Deployments**, abrir o deploy com erro e ler o **Build Log**.
+2. Falha em 2 a 4 segundos, antes da instalação, é configuração do projeto, não do código. Em **Settings → Build and Deployment**, conferir **Framework Preset: Vite**, **Output Directory: docs** (ou deixar o `vercel.json` decidir, sem override).
+3. Falha no `npm run build`: rodar `npm ci && npm run build` localmente na mesma versão e abrir uma issue com o log.
 
-### Comportamento sem Supabase configurado
+### 3. Supabase (só se a loja quiser gravar pedidos)
 
-Se o build for feito sem `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY`, o site continua funcionando e o pedido segue só pelo WhatsApp (o canal principal da loja). O build que está hoje em `docs/` foi gerado **sem** essas variáveis.
+Hoje fica desligado. Por que o RLS vem antes: a chave `anon` vai dentro do JavaScript do site, e qualquer pessoa pode lê-la. Quem protege nomes, telefones e endereços é o Row Level Security. Para ligar:
 
-### Verificação feita antes da entrega
+1. No Supabase, **SQL Editor**: colar e executar `documentacao/supabase-orders.sql` (RLS: o site só insere; ninguém anônimo lê).
+2. Em **Authentication → Policies**, conferir RLS ligado na tabela `orders`, com só a política de inserção para `anon`.
+3. Na Vercel, **Settings → Environment Variables**: criar `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` (valores em Supabase → **Settings → API**). Não colar os valores em issue nem em PR.
+4. Em **Deployments**, clicar em **Redeploy** no último deploy de Production.
+5. Conferir o RLS: fazer um pedido de teste com nome fictício e ver a linha na tabela `orders` do painel. Depois, no console do navegador do site, tentar ler `orders` com a chave `anon`: deve voltar lista vazia.
 
-- `npm ci` limpo, 13 testes passando (3 arquivos), `npm run lint` sem erros, `npm run build` gera `docs/` com caminhos relativos.
-- `npm audit --omit=dev`: nenhuma vulnerabilidade.
+Antes, decidir com a loja o cuidado com nome, telefone e endereço (LGPD). O projeto Supabase gratuito pode estar pausado; religar é do responsável.
 
-## 3. Solução (passo a passo)
+## Rodar localmente
 
-### Etapa 1 · Proteger os dados no Supabase
+```bash
+npm ci
+npm run dev                 # http://localhost:5173
+npm run lint
+npm test                    # Vitest
+npm run build               # gera docs/
+npx playwright install chromium   # só na primeira vez
+npm run test:e2e            # Playwright sobre o build (porta 4182; outra com PW_PORT)
+```
 
-1. No painel do Supabase, abrir **SQL Editor**.
-2. Colar e executar o conteúdo de `documentacao/supabase-orders.sql`.
-3. Em **Authentication → Policies**, conferir que a tabela `orders` tem RLS ligado e só a política de inserção para `anon`.
-
-### Etapa 2 · Gerar o build com as variáveis (Git Bash)
-
-1. `cd /c/ambiente-projeto/ser-mvp/catalogo-acai`
-2. `cp .env.example .env` e preencher `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` (Supabase → Settings → API).
-3. `npm ci`
-4. `npm test && npm run lint`
-5. `npm run build` (recria `docs/` e apaga os arquivos antigos de `docs/assets`)
-
-### Etapa 3 · Subir para o GitHub
-
-1. `git rm tailwind.config.js src/App.css src/assets/react.svg src/assets/vite.svg src/assets/hero.png public/icons.svg` (arquivos sem uso; o Tailwind v4 ignora o `tailwind.config.js`)
-2. `git rm --cached tsconfig.app.tsbuildinfo`
-3. `git status` (o `.env` **não** pode aparecer; `docs/` deve aparecer com o build novo)
-4. `git add -A`
-5. `git commit -m "feat: carrinho em centavos, Supabase por env, RLS, dialog acessível, testes, docs e novo build"`
-6. `git push`
-
-### Etapa 4 · Conferir o GitHub Pages
-
-1. **Settings → Pages**: **Deploy from a branch**, branch `main`, pasta **/docs** (se já estiver assim, nada muda).
-2. Esperar 1 a 2 minutos.
-
-### Etapa 5 · Conferir no ar
-
-1. `https://douglasabnovato.github.io/catalogo-acai/` abre o cardápio.
-2. Montar um açaí com 4 acompanhamentos e ver a cobrança de R$ 2,00 a partir do 4º.
-3. Finalizar o pedido: abre o WhatsApp com o resumo e o pedido aparece na tabela `orders` do Supabase.
-4. No console do navegador, tentar ler pedidos com a chave `anon` deve retornar lista vazia (RLS funcionando).
-
-### Etapa 6 · Fechar
-
-1. No GitHub, **About → Website**: colar a URL.
-2. Confirmar com a loja o valor de R$ 2,00 por acompanhamento extra.
+O `@axe-core/playwright` exige Node 22.12 ou mais novo.

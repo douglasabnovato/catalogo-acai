@@ -87,3 +87,62 @@
 4. README com próximos passos.
 
 **Vira issue.** #16 e #21 (responsável); #17, #18, #19 e #20 (agente). Seguem abertas com o responsável: #3 e #7 (agora com o rótulo `depende-do-responsavel`).
+
+## Ciclo de 16/11/2026
+
+> Branch `feature/2026-11-16` → `developer/sprint-2026-11-19` → `main`. Nível: Vitrine (N2), 12 critérios. O PR #29 entrou na `main` em 16/11/2026. Estado em `MVP.md`.
+
+### Produto
+
+**Problema e público.** Quem compra na Garagem Lanches monta o pedido no celular, muitas vezes com uma mão, e o envia pronto pelo WhatsApp.
+
+**Hipótese e meta.** Pelo menos 30% de quem abre o cardápio toca em "Enviar no WhatsApp". Saberemos quando o painel do GoatCounter mostrar, numa semana, o evento `pedido-enviado` em 30% ou mais das visitas. A conta é do responsável (#7).
+
+**O que a análise achou.**
+- O `MVP.md` dizia 11 de 12, mas dois "Atende" não batiam com a régua: o critério 8 citava só o Lighthouse, sem axe no navegador nem teste de teclado; o critério 9 estava "Atende" com os alertas do Dependabot desligados (API 403), o que a régua em decisão (engenharia#33) deixa em Parcial.
+- O roteiro do vídeo 11 (#31) mediu os botões do carrinho em 26×26 px, com 4 px entre o mais e a lixeira, e propôs 44×44.
+- O `DEPLOY.md` ainda descrevia o GitHub Pages, desligado desde 30/10/2026.
+
+**O que a pesquisa trouxe.**
+
+| Ideia | O que levamos para o projeto | Fonte |
+|---|---|---|
+| Alvo de toque de 44×44 px | O nível AAA da WCAG 2.2 (2.5.5) pede 44×44 px; o AA (2.5.8) pede 24×24. Os botões de quantidade e remover do carrinho passam a 44×44, com teste que mede no navegador | [W3C: Understanding 2.5.5 Target Size (Enhanced)](https://www.w3.org/WAI/WCAG22/Understanding/target-size-enhanced.html) |
+| axe dentro do teste do navegador | O Playwright recomenda o `@axe-core/playwright` com as regras WCAG A e AA, rodando em cada estado da tela (cardápio, montador e checkout) | [Playwright: Accessibility testing](https://playwright.dev/docs/accessibility-testing) |
+| Configuração da Vercel no repositório | O `vercel.json` fixa o comando de build e a pasta de saída (`docs`), em vez de depender só da tela de Settings | [Vercel: Project configuration](https://vercel.com/docs/project-configuration) |
+| Atualização semanal de dependências | O `dependabot.yml` abre PRs de versão para npm e GitHub Actions; os alertas de segurança são outra chave, em Settings | [GitHub: Configuring Dependabot version updates](https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuring-dependabot-version-updates) |
+
+**Backlog priorizado (impacto × esforço).**
+
+| Prioridade | Item | Impacto | Esforço | Destino |
+|---|---|---|---|---|
+| 1 | `MVP.md` honesto: critérios 8 e 9 conforme a régua | Alto | Baixo | Este ciclo |
+| 2 | axe e teclado no Playwright, no celular e no desktop | Alto | Baixo | Este ciclo (#18) |
+| 3 | Botões do carrinho com 44×44 px, com teste | Médio | Baixo | Este ciclo (#31) |
+| 4 | `dependabot.yml` para npm e Actions | Médio | Baixo | Este ciclo (#20) |
+| 5 | `vercel.json` e `DEPLOY.md` da Vercel | Médio | Baixo | Este ciclo |
+| 6 | Patch e minor das dependências de produção | Médio | Baixo | Este ciclo |
+| 7 | Ligar os alertas do Dependabot | Alto | Baixo | Responsável (issue nova) |
+| 8 | Conta do GoatCounter, preço e WhatsApp da loja, pedido real | Alto | Baixo | Responsável (#7, #3, #16) |
+| 9 | Busca por nome e Lighthouse no CI | Médio | Médio | Issues (#17, #19) |
+
+**Fora do escopo.** Pagamento online, gravar pedidos no Supabase, painel da loja, mudar preço ou número da loja (#3).
+
+### Engenharia
+
+**Arquitetura.** Sem mudança: SPA React 19 + Vite + Tailwind v4 em FSD. A Vercel gera o build da `main` em `docs/`. O Supabase segue desligado no site publicado.
+
+**Riscos.**
+- O app tem um tema só, de fundo escuro, sem `prefers-color-scheme`. Rodar o axe com `colorScheme: "dark"` repetiria a mesma tela; o axe roda no celular (375 px) e no desktop.
+- Botões maiores mudam o que o roteiro do vídeo 11 mostra; a mudança fica registrada na #31.
+- O `vercel.json` só repete o que a Vercel já usa; se a tela de Settings tiver outro valor, o arquivo vence. O preview do PR confirma.
+
+**Qualidade.** Testes de axe (WCAG A e AA) no cardápio, no montador e no checkout; teclado com Tab, Esc e foco visível; medida dos alvos de toque. Lighthouse móvel no site publicado, 3 execuções válidas.
+
+**Definição de pronto.** `npm ci`, `npm run lint`, `npm test`, `npm run build` e `npm run test:e2e` passam; CI verde (`build-and-test` e `e2e`); revisão independente feita; `MVP.md` e README atualizados.
+
+### Plano de ação
+
+**Este ciclo executa.** Itens 1 a 6 do backlog.
+
+**Vira issue.** Ligar os alertas do Dependabot (#32, responsável) e ampliar o axe com os itens incompletos e a página com o diálogo aberto (sugestão da revisão independente). Seguem abertas: #3, #7, #16 e #21 (responsável), #17 e #19 (agente).
