@@ -68,6 +68,7 @@ describe('CardapioPage', () => {
     }
     expect(within(dialog).getByText(/19,90/)).toBeInTheDocument();
     expect(within(dialog).getByText('inclui 1 adicional(is)')).toBeInTheDocument();
+    expect(within(dialog).getByRole('note')).toHaveTextContent('Valor dos adicionais ilustrativo');
     await user.keyboard('{Escape}');
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });

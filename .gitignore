@@ -29,3 +29,5 @@ dist-ssr
 
 # Build gerado: a Vercel publica a partir do código
 docs
+/test-results
+/playwright-report
