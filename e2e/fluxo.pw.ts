@@ -26,8 +26,9 @@ test('monta o pedido e abre o WhatsApp com os itens', async ({ page }) => {
   const aba = await montarEEnviar(page);
   await aba.waitForLoadState();
   const texto = decodeURIComponent(aba.url());
-  expect(texto).toMatch(/^https:\/\/(wa\.me|api\.whatsapp\.com)\//);
-  expect(texto).toContain('1x *Esfirra Carne*');
+  // Asserções booleanas: se falharem, o link com o número da loja não vai para o log.
+  expect(/^https:\/\/(wa\.me|api\.whatsapp\.com)\//.test(texto)).toBe(true);
+  expect(texto.includes('1x *Esfirra Carne*')).toBe(true);
   await expect(page.getByRole('dialog', { name: 'Pedido pronto para envio!' })).toBeVisible();
 });
 
