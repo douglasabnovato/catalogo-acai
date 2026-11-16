@@ -49,7 +49,8 @@ Este projeto foi construído utilizando tecnologias modernas de desenvolvimento 
 * **Tailwind CSS v4** (Estilização utilitária avançada)
 * **Lucide React** (Biblioteca de ícones modernos)
 * **Supabase** (Banco de dados relacional e políticas de segurança RLS)
-* **Vitest** + **Testing Library** (23 testes de regras e fluxo)
+* **Vitest** + **Testing Library** (24 testes de regras e tela)
+* **Playwright** + **axe** (19 testes no navegador: fluxo, falhas, acessibilidade e alvos de toque)
 
 ---
 
@@ -59,9 +60,14 @@ Este projeto foi construído utilizando tecnologias modernas de desenvolvimento 
 npm install
 cp .env.example .env     # preencha VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY (opcional)
 npm run dev              # http://localhost:5173
-npm test                 # 23 testes
+npm run lint
+npm test                 # 24 testes Vitest
 npm run build            # gera o build em docs/
+npx playwright install chromium   # só na primeira vez
+npm run test:e2e         # 19 testes Playwright sobre o build (porta 4182; outra com PW_PORT)
 ```
+
+O `@axe-core/playwright` exige Node 22.12 ou mais novo.
 
 Sem o `.env`, o cardápio funciona e envia os pedidos só pelo WhatsApp.
 
@@ -71,7 +77,7 @@ Rode [documentacao/supabase-orders.sql](./documentacao/supabase-orders.sql) no S
 
 ### Publicação
 
-O site está na Vercel. O GitHub Pages está desligado. Detalhes em [documentacao/DEPLOY.md](documentacao/DEPLOY.md).
+O site está na Vercel, com o build definido no `vercel.json`. O GitHub Pages está desligado. Detalhes em [documentacao/DEPLOY.md](documentacao/DEPLOY.md).
 
 **Demonstração:** https://catalogo-acai.vercel.app
 
@@ -83,8 +89,9 @@ O site está na Vercel. O GitHub Pages está desligado. Detalhes em [documentaca
 |---|---|
 | [documentacao/ANALISE.md](./documentacao/ANALISE.md) | Requisitos, diagnóstico, rubrica e BDD |
 | [documentacao/ARQUITETURA.md](./documentacao/ARQUITETURA.md) | C4, FSD, modelo de dados e ADRs |
-| [documentacao/MVP.md](./documentacao/MVP.md) | Estado do MVP: 7 de 12 critérios, N2, Finalizado: sim |
-| [documentacao/PLANO-DE-ACAO.md](./documentacao/PLANO-DE-ACAO.md) | Tarefas de 27/09/2026 e ciclo de 03/11/2026 (pesquisa, produto e engenharia) |
+| [documentacao/MVP.md](./documentacao/MVP.md) | Estado do MVP: 10 de 12 critérios, N2, Finalizado: sim |
+| [documentacao/PLANO-DE-ACAO.md](./documentacao/PLANO-DE-ACAO.md) | Tarefas de 27/09/2026 e ciclos de 03/11 e 16/11/2026 (pesquisa, produto e engenharia) |
+| [documentacao/DEPLOY.md](./documentacao/DEPLOY.md) | Publicação na Vercel e passo a passo do responsável |
 | [documentacao/AVALIACAO.md](./documentacao/AVALIACAO.md) | Evidências e achados de 30/10/2026 |
 | [documentacao/PLANO-ESTRATEGICO.md](./documentacao/PLANO-ESTRATEGICO.md) | Plano vigente e execução |
 
@@ -95,27 +102,28 @@ O site está na Vercel. O GitHub Pages está desligado. Detalhes em [documentaca
 
 ---
 
-## Estado e próximos passos (ciclo de 10/11/2026)
+## Estado e próximos passos (ciclo de 16/11/2026)
 
-No ar em https://catalogo-acai.vercel.app (HTTP 200 em 10/11/2026). Nível Vitrine (N2): 11 de 12 critérios atendidos, Finalizado: sim. Falta só a conta do GoatCounter, do responsável (#7). A `main` exige o job `build-and-test` verde desde 10/11/2026.
+No ar em https://catalogo-acai.vercel.app (HTTP 200 em 16/11/2026). Nível Vitrine (N2): 10 de 12 critérios atendidos, Finalizado: sim. Os dois que faltam dependem do responsável: a conta do GoatCounter (#7) e os alertas do Dependabot (#32). A `main` exige os jobs `build-and-test` e `e2e` verdes.
 
 **O que foi feito**
 
-- GoatCounter ligado ao código `douglasabnovato`, só no site publicado (ciclo de 10/11/2026).
-- Fluxo principal no navegador com Playwright e job `e2e` no CI: `npm run build && npm run test:e2e` (ciclo de 10/11/2026).
-- Valor dos adicionais marcado como ilustrativo até a loja confirmar (ciclo de 10/11/2026).
-- Forma de pagamento (Pix, cartão ou dinheiro), troco validado e observação no pedido, enviados na mensagem do WhatsApp (PR #22).
-- CI também nos PRs e pushes para `developer/**` (PR #22).
-- Evento `pedido-enviado` pronto para o GoatCounter, sem dado pessoal (PR #10).
-- Medições no site publicado: LCP mediano de 1,30 s e acessibilidade 100 (PR #24).
-- Ciclo de 03/11/2026 com pesquisa, produto e engenharia no plano de ação (PR #22).
+- axe (WCAG A e AA) no navegador, no celular e no desktop, e percurso só com teclado: `e2e/acessibilidade.pw.ts` (ciclo de 16/11/2026, #18).
+- Botões do carrinho e fechar do montador com 44×44 px, com teste: `e2e/alvos.pw.ts` (ciclo de 16/11/2026, #31).
+- Falhas testadas no navegador: formulário com erro, carrinho vazio e pop-up bloqueado: `e2e/falhas.pw.ts` (ciclo de 16/11/2026).
+- `.github/dependabot.yml` para npm e GitHub Actions (#20) e `vercel.json` com o build (ciclo de 16/11/2026).
+- `MVP.md` revisto contra a régua: o critério 9 volta a Parcial enquanto os alertas do Dependabot estão desligados (ciclo de 16/11/2026).
+- GoatCounter ligado ao código `douglasabnovato`, só no site publicado (PR #30).
+- Fluxo principal no navegador com Playwright e job `e2e` no CI (PR #30).
+- Forma de pagamento (Pix, cartão ou dinheiro), troco validado e observação no pedido (PR #22).
 
 **O que queremos fazer**
 
-- Do responsável: criar a conta do GoatCounter com o código `douglasabnovato` (#7), confirmar o preço dos adicionais e o WhatsApp da loja (#3), fazer um pedido real e revisar a meta de 30% (#16) e incluir o job `e2e` nos checks obrigatórios (#21).
-- Do código: busca por nome no cardápio (#17), axe no CI (#18), Lighthouse no CI com orçamento de LCP (#19) e Dependabot para npm e GitHub Actions (#20).
+- Do responsável: ligar os alertas do Dependabot (#32), criar a conta do GoatCounter com o código `douglasabnovato` (#7), confirmar o preço dos adicionais e o WhatsApp da loja (#3), fazer um pedido real e revisar a meta de 30% (#16) e fechar a #21 (proteção da `main` com `build-and-test` e `e2e`).
+- Do código: busca por nome no cardápio (#17) e Lighthouse no CI com orçamento de LCP (#19).
 
 **Onde está a documentação**
 
 - [documentacao/MVP.md](documentacao/MVP.md): critérios, evidências e medições.
-- [documentacao/PLANO-DE-ACAO.md](documentacao/PLANO-DE-ACAO.md): seção "Ciclo de 03/11/2026", com pesquisa, produto e engenharia.
+- [documentacao/PLANO-DE-ACAO.md](documentacao/PLANO-DE-ACAO.md): seção "Ciclo de 16/11/2026", com pesquisa, produto e engenharia.
+- [documentacao/DEPLOY.md](documentacao/DEPLOY.md): publicação na Vercel e passo a passo do responsável.
