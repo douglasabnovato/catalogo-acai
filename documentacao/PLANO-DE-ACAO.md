@@ -145,4 +145,4 @@
 
 **Este ciclo executa.** Itens 1 a 6 do backlog.
 
-**Vira issue.** Ligar os alertas do Dependabot (responsável). Seguem abertas: #3, #7, #16 e #21 (responsável), #17 e #19 (agente).
+**Vira issue.** Ligar os alertas do Dependabot (#32, responsável) e ampliar o axe com os itens incompletos e a página com o diálogo aberto (sugestão da revisão independente). Seguem abertas: #3, #7, #16 e #21 (responsável), #17 e #19 (agente).

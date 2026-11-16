@@ -31,12 +31,13 @@ O `vercel.json` repete o que a tela de Settings da Vercel já usava: pasta de sa
 
 ### 3. Supabase (só se a loja quiser gravar pedidos)
 
-Hoje fica desligado. Para ligar:
+Hoje fica desligado. Por que o RLS vem antes: a chave `anon` vai dentro do JavaScript do site, e qualquer pessoa pode lê-la. Quem protege nomes, telefones e endereços é o Row Level Security. Para ligar:
 
 1. No Supabase, **SQL Editor**: colar e executar `documentacao/supabase-orders.sql` (RLS: o site só insere; ninguém anônimo lê).
 2. Em **Authentication → Policies**, conferir RLS ligado na tabela `orders`, com só a política de inserção para `anon`.
 3. Na Vercel, **Settings → Environment Variables**: criar `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` (valores em Supabase → **Settings → API**). Não colar os valores em issue nem em PR.
 4. Em **Deployments**, clicar em **Redeploy** no último deploy de Production.
+5. Conferir o RLS: fazer um pedido de teste com nome fictício e ver a linha na tabela `orders` do painel. Depois, no console do navegador do site, tentar ler `orders` com a chave `anon`: deve voltar lista vazia.
 
 Antes, decidir com a loja o cuidado com nome, telefone e endereço (LGPD). O projeto Supabase gratuito pode estar pausado; religar é do responsável.
 

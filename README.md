@@ -110,7 +110,7 @@ No ar em https://catalogo-acai.vercel.app (HTTP 200 em 16/11/2026). Nível Vitri
 
 - axe (WCAG A e AA) no navegador, no celular e no desktop, e percurso só com teclado: `e2e/acessibilidade.pw.ts` (ciclo de 16/11/2026, #18).
 - Botões do carrinho e fechar do montador com 44×44 px, com teste: `e2e/alvos.pw.ts` (ciclo de 16/11/2026, #31).
-- Falhas testadas no navegador: formulário com erro, carrinho vazio e pop-up bloqueado: `e2e/falhas.pw.ts` (ciclo de 16/11/2026).
+- Falhas testadas no navegador: formulário com erro, carrinho vazio e link de reserva com a nova aba bloqueada: `e2e/falhas.pw.ts` (ciclo de 16/11/2026).
 - `.github/dependabot.yml` para npm e GitHub Actions (#20) e `vercel.json` com o build (ciclo de 16/11/2026).
 - `MVP.md` revisto contra a régua: o critério 9 volta a Parcial enquanto os alertas do Dependabot estão desligados (ciclo de 16/11/2026).
 - GoatCounter ligado ao código `douglasabnovato`, só no site publicado (PR #30).
