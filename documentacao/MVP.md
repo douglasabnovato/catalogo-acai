@@ -1,38 +1,39 @@
 # MVP — Garagem Lanches
 
-> Criado em 31/10/2026, com os critérios usados no `movies`. Revisto em 10/11/2026 (ciclo da faixa de 90%, decisões D1 a D7 do repositório `engenharia`).
+> Criado em 31/10/2026, com os critérios usados no `movies`. Revisto em 16/11/2026 (ciclo de 16/11/2026), contra a régua do repositório `engenharia`.
 
-**Resumo:** 11 de 12 aplicáveis atendidos
+**Nível:** Vitrine (N2). Os 12 critérios se aplicam.
 
-**Finalizado:** sim — falta só a conta do GoatCounter, do responsável (#7, com `depende-do-responsavel`).
+**Resumo:** 10 de 12 aplicáveis atendidos
+
+**Finalizado:** sim — os dois critérios que faltam dependem do responsável e têm issue com `depende-do-responsavel`: a conta do GoatCounter (#7) e os alertas do Dependabot (#32).
 
 ## Problema e hipótese
 
 **Problema e público:** Quem compra na Garagem Lanches monta o pedido no celular e o envia pronto pelo WhatsApp, sem digitar item por item.
 
-**Hipótese:** Pelo menos 30% de quem abre o cardápio chega a tocar em **Enviar no WhatsApp**. Meta decidida pelo coordenador em 10/11/2026 (decisão D1), revisável pelo responsável (#16). O evento que conta é `pedido-enviado`.
+**Hipótese:** Acreditamos que montar o pedido pronto no cardápio faz o cliente concluir a compra pelo WhatsApp. **Meta:** pelo menos 30% de quem abre o cardápio toca em **Enviar no WhatsApp**. **Saberemos quando** o painel do GoatCounter mostrar, numa semana, o evento `pedido-enviado` em 30% ou mais das visitas. Meta decidida pelo coordenador em 10/11/2026 (decisão D1), revisável pelo responsável (#16).
 
 ## 1. Critérios
 
-**Nível:** Vitrine (N2). Os 12 critérios se aplicam.
-
-| # | Critério | Como verificar | Situação em 10/11/2026 (evidência) |
+| # | Critério | Como verificar | Situação em 16/11/2026 (evidência) |
 |---|---|---|---|
 | 1 | Problema e público claros | Dá para explicar em uma frase | Atende: frase acima |
-| 2 | Hipótese a validar | Existe uma aposta escrita, com meta | Atende: meta decidida pelo coordenador em 10/11/2026 (decisão D1), revisável pelo responsável (#16) |
-| 3 | Fluxo principal completo | Uma pessoa conclui sem ajuda | Atende (decisão D2): `npm run test:e2e` (Playwright, novo job `e2e` no CI), 10/11/2026: 4 testes, 0 falhas; monta o pedido, preenche nome, WhatsApp e retirada e abre o WhatsApp com os itens (o WhatsApp é simulado). O fluxo roda todo no navegador; o site publicado responde (`curl`, HTTP 200, 10/11/2026). O pedido real com a loja virou validação (#16) |
+| 2 | Hipótese a validar | Aposta escrita, com meta | Atende: hipótese, meta de 30% e "saberemos quando" acima; meta revisável pelo responsável (#16) |
+| 3 | Fluxo principal completo | Teste de ponta a ponta no navegador no CI | Atende: `npm run build && npm run test:e2e` (Playwright, job `e2e` do CI), 16/11/2026: 19 testes, 0 falhas, 0 pulados. `e2e/fluxo.pw.ts` monta o pedido, preenche nome, WhatsApp e retirada e abre o WhatsApp com os itens (o WhatsApp é simulado). O site publicado responde: `curl` HTTP 200, 16/11/2026 |
 | 4 | Escopo enxuto | O que não entra está registrado | Atende: seção 3; o WhatsApp é o único canal |
-| 5 | Medição de uso | A métrica principal é coletada | Parcial: código pronto; falta a conta (decisão D5, #7). O GoatCounter usa o código `douglasabnovato` no site publicado, sem cookie, só com o evento `pedido-enviado`; não carrega em localhost nem nos testes (Vitest e Playwright) |
-| 6 | Falhas tratadas | Erro, vazio e carregamento têm resposta clara | Atende: formulário validado com foco no erro, troco menor que o total recusado, carrinho vazio, pop-up bloqueado com link de reserva, carrinho mantido ao recarregar (PR #5) |
-| 7 | Desempenho aceitável | LCP de até 2,5 s no celular | Atende: Lighthouse 12.8.2 móvel no site publicado, 10/11/2026: 1,40 / 1,42 / 1,28 s, mediana 1,40 s, TBT 61 ms, elemento do LCP `li > div > p.text-xs` (descrição do primeiro item) |
-| 8 | Acessibilidade básica | Lighthouse e teclado | Atende: Lighthouse 100 nas 3 execuções de 03/11; campos novos com rótulo, erro ligado por `aria-describedby` e botões com `aria-pressed` |
-| 9 | Segurança e conformidade | Riscos decididos; termos de terceiros cumpridos | Atende (decisão D4): o site publicado não grava dado pessoal (o pedido vai só pelo WhatsApp); o Supabase fica desligado no MVP (seção 3); o valor dos adicionais, sem confirmação da loja, aparece na tela como ilustrativo, com teste (Vitest e Playwright), 10/11/2026. `npm audit --omit=dev`: 0 vulnerabilidades; Dependabot desligado (API 403), 10/11/2026. Confirmar o preço e o número do WhatsApp segue com o responsável (#3) |
-| 10 | Entrega confiável | Publicação só depois de CI verde | Atende: `gh api repos/douglasabnovato/catalogo-acai/rules/branches/main`, 10/11/2026: `required_status_checks` com `build-and-test`, além de PR obrigatório e bloqueio de force push e exclusão. A Vercel publica a `main`, que só recebe o que passou no CI. Incluir o novo job `e2e` nos checks é do responsável (#21) |
-| 11 | Testes dos fluxos críticos | Testes automatizados no CI | Atende: `npm test`, 10/11/2026: 24 testes Vitest, 0 falhas; 4 testes Playwright no job `e2e` |
-| 12 | Documentação honesta | Qualquer pessoa roda o projeto, e os números estão certos | Atende: README, este documento e `PLANO-DE-ACAO.md` conferidos contra o `package.json` em 10/11/2026 |
+| 5 | Medição de uso | Painel com visitas | Parcial: código pronto, com teste (`e2e/fluxo.pw.ts` e `src/shared/lib/metrics.test.ts`); falta a conta do GoatCounter com o código `douglasabnovato`, do responsável (#7). Sem painel, não há visitas a mostrar |
+| 6 | Falhas tratadas | Erro, vazio e carregamento têm resposta | Atende: `npm run test:e2e`, 16/11/2026, `e2e/falhas.pw.ts` (3 testes): formulário vazio põe o foco no primeiro erro, carrinho que fica vazio avisa e desliga o envio, pop-up bloqueado mostra o link de reserva. `npm test`, 16/11/2026: troco menor que o total recusado e carrinho salvo com dado vencido ou inválido ignorado. O cardápio é local: não há carregamento de rede a esperar |
+| 7 | Desempenho aceitável | LCP até 2,5 s no celular, no site publicado | Atende: Lighthouse 12.8.2 móvel em https://catalogo-acai.vercel.app, 16/11/2026, 3 execuções válidas: LCP 1,53 / 1,31 / 1,27 s, **mediana 1,31 s**; TBT 79 / 44 / 60 ms (mediana 60 ms); elemento do LCP `ul.grid > li > div > p.text-xs` (descrição do primeiro item). Uma 4ª execução deu 1,26 s |
+| 8 | Acessibilidade básica | axe e teclado | Atende: `npm run test:e2e`, 16/11/2026, `e2e/acessibilidade.pw.ts`: axe (WCAG 2.0, 2.1 e 2.2, A e AA) sem violações no cardápio, no montador, no checkout com erros e na tela de sucesso, a 375 px e a 1280 px; teclado com Tab até o botão, Enter abre, Esc fecha e devolve o foco, Tab preso no diálogo, contorno amarelo de 3 px do app. `e2e/alvos.pw.ts`: botões do carrinho e fechar do montador com 44×44 px. O app tem um tema só, de fundo escuro, sem `prefers-color-scheme`: não há modo claro e escuro a comparar |
+| 9 | Segurança e conformidade | Audit, alertas do Dependabot, segredos e dados pessoais | Parcial: alertas do Dependabot desligados (`gh api "repos/douglasabnovato/catalogo-acai/dependabot/alerts?state=open&per_page=100"` → 403, 16/11/2026); pela régua em decisão (engenharia#33), fica Parcial até ligar (#32, do responsável). O resto está em dia: `npm audit --omit=dev`, 16/11/2026: 0 vulnerabilidades; nenhum segredo no código (só `.env.example` com os nomes); o site publicado não grava dado pessoal, porque o pedido vai só pelo WhatsApp e o Supabase fica desligado (seção 3). O valor dos adicionais aparece como ilustrativo, com teste, até a loja confirmar o preço e o número do WhatsApp (#3); os dois seguem como estão no código |
+| 10 | Entrega confiável | CI nos PRs e principal protegida | Atende: `gh api repos/douglasabnovato/catalogo-acai/rules/branches/main`, 16/11/2026: `deletion`, `non_fast_forward`, `pull_request` e `required_status_checks` com `build-and-test` e `e2e`. A Vercel publica a `main`, que só recebe o que passou nos dois jobs |
+| 11 | Testes dos fluxos críticos | Testes automatizados no CI, sem pulados | Atende: 16/11/2026, `npm test`: 24 testes Vitest, 0 falhas; `npm run test:e2e`: 19 testes Playwright, 0 falhas, 0 pulados. Os dois rodam no CI (jobs `build-and-test` e `e2e`) |
+| 12 | Documentação honesta | README com comandos conferidos | Atende: README, este documento, `PLANO-DE-ACAO.md` e `DEPLOY.md` conferidos contra o `package.json` e o `vercel.json` em 16/11/2026; o link publicado respondeu HTTP 200 em 16/11/2026 |
 
 ## Histórico
 
+- 10/11/2026: o documento dizia 11 de 12. Na revisão de 16/11/2026, dois "Atende" não batiam com a régua: o 8 citava só o Lighthouse, sem axe no navegador nem teclado (corrigido com `e2e/acessibilidade.pw.ts`), e o 9 estava "Atende" com os alertas do Dependabot desligados (volta a Parcial, #32). Contagem honesta antes deste ciclo: 9 de 12.
 - 03/11/2026, critério 10 revisto em 10/11/2026: 7 de 12. Parciais: 2 (meta proposta), 3 (pedido real), 5 (falta a conta), 9 (preço e Supabase sem decisão) e 10 (Vercel sem esperar o CI).
 
 ## 2. Tarefas
@@ -42,20 +43,27 @@
 | 1 | Manter o carrinho ao recarregar | Feito (PR #5) |
 | 2 | Remover de `docs/` o build que nada publica | Feito (PR #6) |
 | 3 | Forma de pagamento, troco e observação no pedido | Feito em 03/11 |
-| 4 | Confirmar com a loja o preço de R$ 2,00 por adicional e o WhatsApp | Com o responsável (#3) |
-| 5 | Coletar a métrica com o GoatCounter: sem cookies, evento `pedido-enviado`, meta proposta de 30% dos acessos | Código pronto; falta a conta (#7) |
+| 4 | Confirmar com a loja o preço de R$ 2,00 por adicional e o WhatsApp | Com o responsável (#3); o código mantém os valores atuais e o aviso de "ilustrativo" |
+| 5 | Coletar a métrica com o GoatCounter: sem cookies, evento `pedido-enviado`, meta de 30% dos acessos | Código pronto; falta a conta (#7) |
 | 6 | Testar um pedido real com a loja e confirmar a meta | Com o responsável (#16) |
-| 7 | Proteger a `main` e publicar só com CI verde | Proteção feita em 10/11/2026; a Vercel esperar o CI segue com o responsável (#21) |
-| 8 | Busca, axe e Lighthouse no CI, Dependabot | Próximos passos (#17, #18, #19, #20) |
+| 7 | Proteger a `main` e publicar só com CI verde | Feito: ruleset com `build-and-test` e `e2e` (16/11/2026); a #21 fecha com o responsável |
+| 8 | axe e teclado no navegador | Feito no ciclo de 16/11/2026 (#18) |
+| 9 | Alvos de toque de 44×44 px no carrinho | Feito no ciclo de 16/11/2026 (#31) |
+| 10 | Dependabot de versões para npm e Actions | `.github/dependabot.yml` no ciclo de 16/11/2026 (#20); os alertas são do responsável (#32) |
+| 11 | Busca por nome e Lighthouse no CI | Próximos passos (#17, #19) |
 
 ## 3. Fora do MVP
 
 Gravar pedidos no Supabase: **a decisão proposta é não ligar no MVP**, porque o WhatsApp já entrega o pedido à loja e gravar dados pessoais exigiria mais cuidado com LGPD. O código continua pronto. Também ficam fora pagamento online e painel da loja. A lista é uma proposta e pode mudar com a decisão do responsável.
 
-## Medições de 02/11/2026
+## Medições de 16/11/2026
 
-Mediana do LCP de 1,58 s (1,58, 1,81 e 1,28 s), desempenho 100, acessibilidade 100. Lighthouse 12.8.2 local, perfil móvel simulado, sem aparelho real.
+Site publicado (`main` depois do PR #29). Lighthouse 12.8.2, perfil móvel simulado, 4 execuções válidas (sem `runtimeError`): LCP 1,53, 1,31, 1,27 e 1,26 s; desempenho 98, 99, 100 e 100; acessibilidade 100 nas 4. Registradas as 3 primeiras no critério 7.
 
 ## Medições de 03/11/2026
 
 Site publicado depois do PR #23 (bundle com o checkout novo). Mediana do LCP de 1,30 s (1,49, 1,28 e 1,30 s), desempenho 96 (96, 87 e 99), acessibilidade 100 nas 3 execuções. Lighthouse 12.8.2 local, perfil móvel simulado, sem aparelho real.
+
+## Medições de 02/11/2026
+
+Mediana do LCP de 1,58 s (1,58, 1,81 e 1,28 s), desempenho 100, acessibilidade 100. Lighthouse 12.8.2 local, perfil móvel simulado, sem aparelho real.
