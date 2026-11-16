@@ -98,6 +98,11 @@ test('só com teclado: abre o montador, Esc fecha e o foco volta, com contorno v
   const dialogo = page.getByRole('dialog', { name: 'Açaí 300ml' });
   await expect(dialogo).toBeVisible();
   await expect(dialogo.getByRole('button', { name: 'Fechar' })).toBeFocused();
+  // O Tab fica preso no montador: dar a volta completa (17 controles) não sai dele.
+  for (let i = 0; i < 20; i += 1) {
+    await page.keyboard.press('Tab');
+    expect(await page.evaluate(() => Boolean(document.activeElement?.closest('[role="dialog"]')))).toBe(true);
+  }
 
   await page.keyboard.press('Escape');
   await expect(dialogo).toBeHidden();

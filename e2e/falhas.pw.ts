@@ -33,8 +33,12 @@ test('carrinho que fica vazio: avisa e não deixa enviar', async ({ page }) => {
   await expect(pedido.getByRole('button', { name: /Enviar no WhatsApp/ })).toBeDisabled();
 });
 
-test('pop-up bloqueado: a tela de sucesso oferece o link de reserva', async ({ page }) => {
-  // Simula o navegador que bloqueia a nova aba.
+/*
+ * Com 'noopener', window.open devolve null mesmo quando abre: o app não sabe se houve bloqueio.
+ * Por isso a tela de sucesso traz sempre o link de reserva. O teste confere o link com a aba bloqueada.
+ */
+test('pop-up bloqueado: a tela de sucesso sempre oferece o link de reserva', async ({ page }) => {
+  // Simula o navegador que não abre a nova aba.
   await page.addInitScript(() => { window.open = () => null; });
   const pedido = await abrirPedido(page);
   await pedido.getByLabel(/Seu nome/).fill('Pessoa Teste');
