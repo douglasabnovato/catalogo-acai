@@ -104,10 +104,11 @@ O site está na Vercel, com o build definido no `vercel.json`. O GitHub Pages es
 
 ## Estado e próximos passos (ciclo de 16/11/2026)
 
-No ar em https://catalogo-acai.vercel.app (HTTP 200 em 16/11/2026). Nível Vitrine (N2): 10 de 12 critérios atendidos, Finalizado: sim. Os dois que faltam dependem do responsável: a conta do GoatCounter (#7) e os alertas do Dependabot (#32). A `main` exige os jobs `build-and-test` e `e2e` verdes.
+No ar em https://catalogo-acai.vercel.app (HTTP 200 em 16/11/2026). Nível Vitrine (N2): 10 de 12 critérios atendidos, Finalizado: não. Faltam a conta do GoatCounter (#7, do responsável) e o critério 9: dos 16 alertas do Dependabot abertos em 16/11/2026, 15 têm correção na sprint-19 (PR #45) e 1 segue sem correção nem decisão (#44). A `main` exige os jobs `build-and-test` e `e2e` verdes.
 
 **O que foi feito**
 
+- Alertas do Dependabot ligados pelo responsável em 16/11/2026: 15 dos 16 corrigidos só no `package-lock.json`, sem versão maior (PR #45); o `minimatch` do `typescript-eslint` só sai com versão maior (#44).
 - axe (WCAG A e AA) no navegador, no celular e no desktop, e percurso só com teclado: `e2e/acessibilidade.pw.ts` (ciclo de 16/11/2026, #18).
 - Botões do carrinho e fechar do montador com 44×44 px, com teste: `e2e/alvos.pw.ts` (ciclo de 16/11/2026, #31).
 - Falhas testadas no navegador: formulário com erro, carrinho vazio e link de reserva com a nova aba bloqueada: `e2e/falhas.pw.ts` (ciclo de 16/11/2026).
@@ -119,7 +120,7 @@ No ar em https://catalogo-acai.vercel.app (HTTP 200 em 16/11/2026). Nível Vitri
 
 **O que queremos fazer**
 
-- Do responsável: ligar os alertas do Dependabot (#32), criar a conta do GoatCounter com o código `douglasabnovato` (#7), confirmar o preço dos adicionais e o WhatsApp da loja (#3), fazer um pedido real e revisar a meta de 30% (#16) e fechar a #21 (proteção da `main` com `build-and-test` e `e2e`).
+- Do responsável: fechar a #32 (alertas ligados em 16/11/2026), decidir o alerta que resta (#44), criar a conta do GoatCounter com o código `douglasabnovato` (#7), confirmar o preço dos adicionais e o WhatsApp da loja (#3), fazer um pedido real e revisar a meta de 30% (#16) e fechar a #21 (proteção da `main` com `build-and-test` e `e2e`).
 - Do código: busca por nome no cardápio (#17) e Lighthouse no CI com orçamento de LCP (#19).
 
 **Onde está a documentação**
