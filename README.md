@@ -114,8 +114,8 @@ No ar em https://catalogo-acai.vercel.app (HTTP 200 em 18/11/2026). Nível Vitri
 
 **O que foi feito**
 
-- Com um diálogo aberto, o cardápio atrás dele fica inerte (`inert`): sem foco e fora da árvore de acessibilidade. O axe passa a contar os itens que não decide sozinho (`incomplete`), com o contraste medido no teste (ciclo de 18/11/2026, #34).
-- LCP medido de novo no site publicado depois da sprint de 19/11/2026: mediana 1,22 s (ciclo de 18/11/2026, #37).
+- Com um diálogo aberto, o cardápio atrás dele fica inerte (`inert`): sem foco e fora da árvore de acessibilidade. O axe passa a contar os itens que não decide sozinho (`incomplete`), com o contraste medido no teste (ciclo de 18/11/2026, #34; na sprint-19 pelo PR #51, entra na `main` com o merge do responsável).
+- LCP medido de novo no site publicado depois da sprint-19: mediana 1,22 s (ciclo de 18/11/2026, #37).
 - Regra do Dependabot no README, seção "Dependências" (ciclo de 18/11/2026, #20).
 
 - Alertas do Dependabot ligados pelo responsável em 16/11/2026: 15 dos 16 corrigidos só no `package-lock.json`, sem versão maior (PR #45); o `minimatch` do `typescript-eslint` saiu com a versão menor 8.73.0 do `typescript-eslint` (PR #47, #44).

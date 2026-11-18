@@ -242,4 +242,11 @@ test('com o diálogo aberto, o fundo fica inerte: sem foco e fora da árvore de 
   await expect(pedido).toBeHidden();
   await expect(page.getByRole('button', { name: 'Montar copo: Açaí 300ml' })).toBeVisible();
   expect(await page.locator('[inert]').count()).toBe(0);
+
+  // Com o montador aberto, a barra do pedido continua na tela, mas também fica inerte.
+  await page.getByRole('button', { name: 'Montar copo: Açaí 300ml' }).click();
+  await expect(page.getByRole('dialog', { name: 'Açaí 300ml' })).toBeVisible();
+  const verPedido = page.locator('button', { hasText: 'Ver pedido' });
+  await expect(verPedido).toBeVisible();
+  expect(await verPedido.evaluate((b) => { (b as HTMLElement).focus(); return document.activeElement === b; })).toBe(false);
 });
