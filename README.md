@@ -50,7 +50,7 @@ Este projeto foi construído utilizando tecnologias modernas de desenvolvimento 
 * **Lucide React** (Biblioteca de ícones modernos)
 * **Supabase** (Banco de dados relacional e políticas de segurança RLS)
 * **Vitest** + **Testing Library** (24 testes de regras e tela)
-* **Playwright** + **axe** (19 testes no navegador: fluxo, falhas, acessibilidade e alvos de toque)
+* **Playwright** + **axe** (24 testes no navegador: fluxo, falhas, acessibilidade e alvos de toque)
 
 ---
 
@@ -64,12 +64,18 @@ npm run lint
 npm test                 # 24 testes Vitest
 npm run build            # gera o build em docs/
 npx playwright install chromium   # só na primeira vez
-npm run test:e2e         # 19 testes Playwright sobre o build (porta 4182; outra com PW_PORT)
+npm run test:e2e         # 24 testes Playwright sobre o build (porta 4182; outra com PW_PORT)
 ```
 
 O `@axe-core/playwright` exige Node 22.12 ou mais novo.
 
 Sem o `.env`, o cardápio funciona e envia os pedidos só pelo WhatsApp.
+
+### Dependências
+
+O `.github/dependabot.yml` abre PRs semanais para npm e GitHub Actions (#20). Regra para mesclar:
+- **patch e minor:** vêm agrupados num PR só (`patch-e-minor`); com `build-and-test` e `e2e` verdes, o responsável mescla.
+- **versão maior:** só com revisão. Cada PR recebe a análise (o que muda, CI, risco) e o responsável decide; a triagem fica numa issue (#50).
 
 ### Supabase
 
@@ -89,7 +95,7 @@ O site está na Vercel, com o build definido no `vercel.json`. O GitHub Pages es
 |---|---|
 | [documentacao/ANALISE.md](./documentacao/ANALISE.md) | Requisitos, diagnóstico, rubrica e BDD |
 | [documentacao/ARQUITETURA.md](./documentacao/ARQUITETURA.md) | C4, FSD, modelo de dados e ADRs |
-| [documentacao/MVP.md](./documentacao/MVP.md) | Estado do MVP: 10 de 12 critérios, N2, Finalizado: sim |
+| [documentacao/MVP.md](./documentacao/MVP.md) | Estado do MVP: 11 de 12 critérios, N2, Finalizado: sim |
 | [documentacao/PLANO-DE-ACAO.md](./documentacao/PLANO-DE-ACAO.md) | Tarefas de 27/09/2026 e ciclos de 03/11 e 16/11/2026 (pesquisa, produto e engenharia) |
 | [documentacao/DEPLOY.md](./documentacao/DEPLOY.md) | Publicação na Vercel e passo a passo do responsável |
 | [documentacao/AVALIACAO.md](./documentacao/AVALIACAO.md) | Evidências e achados de 30/10/2026 |
@@ -102,11 +108,15 @@ O site está na Vercel, com o build definido no `vercel.json`. O GitHub Pages es
 
 ---
 
-## Estado e próximos passos (ciclo de 16/11/2026)
+## Estado e próximos passos (ciclo de 18/11/2026)
 
-No ar em https://catalogo-acai.vercel.app (HTTP 200 em 16/11/2026). Nível Vitrine (N2): 11 de 12 critérios atendidos, Finalizado: sim. Falta só a conta do GoatCounter (#7, do responsável). Os 16 alertas do Dependabot abertos em 16/11/2026 têm correção na sprint-19 (PRs #45 e #47) e fecham com o merge na `main`. A `main` exige os jobs `build-and-test` e `e2e` verdes.
+No ar em https://catalogo-acai.vercel.app (HTTP 200 em 18/11/2026). Nível Vitrine (N2): 11 de 12 critérios atendidos, Finalizado: sim. Falta só a conta do GoatCounter (#7, do responsável). Alertas do Dependabot abertos: 0 em 18/11/2026 (os 16 de 16/11/2026 foram corrigidos pelos PRs #45 e #47, já na `main`). A `main` exige os jobs `build-and-test` e `e2e` verdes.
 
 **O que foi feito**
+
+- Com um diálogo aberto, o cardápio atrás dele fica inerte (`inert`): sem foco e fora da árvore de acessibilidade. O axe passa a contar os itens que não decide sozinho (`incomplete`), com o contraste medido no teste (ciclo de 18/11/2026, #34; na sprint-19 pelo PR #51, entra na `main` com o merge do responsável).
+- LCP medido de novo no site publicado depois da sprint-19: mediana 1,22 s (ciclo de 18/11/2026, #37).
+- Regra do Dependabot no README, seção "Dependências" (ciclo de 18/11/2026, #20).
 
 - Alertas do Dependabot ligados pelo responsável em 16/11/2026: 15 dos 16 corrigidos só no `package-lock.json`, sem versão maior (PR #45); o `minimatch` do `typescript-eslint` saiu com a versão menor 8.73.0 do `typescript-eslint` (PR #47, #44).
 - axe (WCAG A e AA) no navegador, no celular e no desktop, e percurso só com teclado: `e2e/acessibilidade.pw.ts` (ciclo de 16/11/2026, #18).
@@ -120,8 +130,8 @@ No ar em https://catalogo-acai.vercel.app (HTTP 200 em 16/11/2026). Nível Vitri
 
 **O que queremos fazer**
 
-- Do responsável: fechar a #32 (alertas ligados em 16/11/2026), criar a conta do GoatCounter com o código `douglasabnovato` (#7), confirmar o preço dos adicionais e o WhatsApp da loja (#3), fazer um pedido real e revisar a meta de 30% (#16) e fechar a #21 (proteção da `main` com `build-and-test` e `e2e`).
-- Do código: busca por nome no cardápio (#17) e Lighthouse no CI com orçamento de LCP (#19).
+- Do responsável: fechar a #32 (alertas ligados, 0 abertos em 18/11/2026) e a #21 (proteção da `main` com `build-and-test` e `e2e`), criar a conta do GoatCounter com o código `douglasabnovato` (#7), confirmar o preço dos adicionais e o WhatsApp da loja (#3), fazer um pedido real e revisar a meta de 30% (#16) e decidir os PRs do Dependabot de versão maior (#50).
+- Do código (próximos passos): busca por nome no cardápio (#17), Lighthouse no CI com orçamento de LCP (#19) e o merge na `main` do fundo inerte e do axe com itens incompletos (#34).
 
 **Onde está a documentação**
 

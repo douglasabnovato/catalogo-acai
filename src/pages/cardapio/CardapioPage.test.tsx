@@ -40,7 +40,7 @@ describe('CardapioPage', () => {
     await user.click(screen.getByRole('button', { name: /Ver pedido/ }));
     const dialog = screen.getByRole('dialog', { name: 'Seu pedido' });
     await user.click(within(dialog).getByRole('button', { name: 'Diminuir Esfirra Carne' }));
-    expect(within(dialog).getByLabelText('Quantidade: 1')).toBeInTheDocument();
+    expect(within(dialog).getByText('Quantidade: 1')).toBeInTheDocument();
 
     await user.click(within(dialog).getByRole('button', { name: /Enviar no WhatsApp/ }));
     expect(within(dialog).getByText('Informe seu nome.')).toBeInTheDocument();

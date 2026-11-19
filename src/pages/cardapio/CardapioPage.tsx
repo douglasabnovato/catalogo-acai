@@ -58,6 +58,8 @@ export const CardapioPage = () => {
   const filteredItems = activeCategory === 'all' ? menuData : menuData.filter((item) => item.category === activeCategory);
   const totalCents = cartTotal(cart);
   const count = cartCount(cart);
+  /* Com um diálogo aberto, o fundo fica inerte: sem foco por Tab e fora da árvore de acessibilidade. */
+  const dialogOpen = Boolean(selectedAcai) || isCheckoutOpen || Boolean(sentUrl);
 
   /* Adiciona ao carrinho e anuncia para leitores de tela. */
   const addToCart = (item: { name: string; unitCents: number; details: string }) => {
@@ -110,7 +112,7 @@ export const CardapioPage = () => {
     <div className="min-h-screen bg-[#09090b] text-zinc-100 pb-32 selection:bg-amber-400 selection:text-zinc-950">
       <p className="sr-only" role="status" aria-live="polite">{announcement}</p>
 
-      <header className="sticky top-0 z-40 bg-zinc-950/90 backdrop-blur-md border-b border-zinc-800/80 px-4 py-4">
+      <header inert={dialogOpen} className="sticky top-0 z-40 bg-zinc-950/90 backdrop-blur-md border-b border-zinc-800/80 px-4 py-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-zinc-950 font-black text-xl" aria-hidden="true">
@@ -133,7 +135,7 @@ export const CardapioPage = () => {
         </div>
       </header>
 
-      <nav aria-label="Categorias do cardápio" className="sticky top-[73px] z-30 bg-[#09090b]/95 backdrop-blur border-b border-zinc-800/60 py-3 px-4">
+      <nav inert={dialogOpen} aria-label="Categorias do cardápio" className="sticky top-[73px] z-30 bg-[#09090b]/95 backdrop-blur border-b border-zinc-800/60 py-3 px-4">
         <div className="max-w-4xl mx-auto flex gap-2 overflow-x-auto no-scrollbar pb-1">
           {CATEGORIES.map((category) => {
             const Icon = category.icon;
@@ -157,7 +159,7 @@ export const CardapioPage = () => {
         </div>
       </nav>
 
-      <main className="max-w-4xl mx-auto px-4 pt-6">
+      <main inert={dialogOpen} className="max-w-4xl mx-auto px-4 pt-6">
         <h2 className="sr-only">Produtos</h2>
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {filteredItems.map((item) => (
@@ -196,7 +198,7 @@ export const CardapioPage = () => {
       {selectedAcai && <AcaiBuilderModal item={selectedAcai} onClose={() => setSelectedAcai(null)} onAddToCart={addToCart} />}
 
       {count > 0 && !isCheckoutOpen && (
-        <div className="fixed bottom-0 left-0 right-0 z-40 bg-zinc-950/95 backdrop-blur-xl border-t border-zinc-800 p-4">
+        <div inert={dialogOpen} className="fixed bottom-0 left-0 right-0 z-40 bg-zinc-950/95 backdrop-blur-xl border-t border-zinc-800 p-4">
           <div className="max-w-4xl mx-auto flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-11 h-11 rounded-2xl bg-amber-400 text-zinc-950 flex items-center justify-center" aria-hidden="true">
@@ -238,7 +240,9 @@ export const CardapioPage = () => {
                     <button type="button" onClick={() => dispatch({ type: 'decrement', key: line.key })} aria-label={`Diminuir ${line.name}`} className="w-11 h-11 flex items-center justify-center rounded-xl bg-zinc-800 text-zinc-200">
                       <Minus size={16} aria-hidden="true" />
                     </button>
-                    <span className="w-6 text-center font-mono" aria-label={`Quantidade: ${line.quantity}`}>{line.quantity}</span>
+                    {/* aria-label num span sem papel é proibido (axe aria-prohibited-attr): o texto vai para leitores de tela à parte */}
+                    <span className="w-6 text-center font-mono" aria-hidden="true">{line.quantity}</span>
+                    <span className="sr-only">Quantidade: {line.quantity}</span>
                     <button type="button" onClick={() => dispatch({ type: 'increment', key: line.key })} aria-label={`Aumentar ${line.name}`} className="w-11 h-11 flex items-center justify-center rounded-xl bg-zinc-800 text-zinc-200">
                       <Plus size={16} aria-hidden="true" />
                     </button>
