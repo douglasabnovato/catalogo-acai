@@ -30,6 +30,34 @@ test('botões de quantidade e remover do carrinho com 44×44 px', async ({ page 
   expect(rolaDeLado).toBe(false);
 });
 
+/* Itens de nome longo e açaí com detalhes: nenhum item do carrinho rola de lado nem sai do diálogo (#34). */
+for (const largura of [320, 375]) {
+  test(`itens do carrinho sem rolagem lateral a ${largura} px`, async ({ page }) => {
+    await page.setViewportSize({ width: largura, height: 812 });
+    await page.goto('./');
+    await page.getByRole('button', { name: 'Combos' }).click();
+    await page.getByRole('button', { name: 'Adicionar: Combo 4: Sanduíche + Guaraná Natural (500ml) + Maionese' }).click();
+    await page.getByRole('button', { name: 'Açaís' }).click();
+    await page.getByRole('button', { name: 'Montar copo: Açaí 300ml' }).click();
+    const montador = page.getByRole('dialog', { name: 'Açaí 300ml' });
+    for (const item of ['Leite Condensado', 'Calda de Chocolate', 'Morango Picado', 'Banana Picada']) {
+      await montador.getByRole('button', { name: item, exact: true }).click();
+    }
+    await montador.getByRole('button', { name: /Adicionar/ }).click();
+    await page.getByRole('button', { name: /Ver pedido/ }).click();
+    const pedido = page.getByRole('dialog', { name: 'Seu pedido' });
+    const itens = pedido.locator('section ul > li');
+    await expect(itens).toHaveCount(2);
+    const medidas = await itens.evaluateAll((lis) => lis.map((li) => {
+      const caixa = li.getBoundingClientRect();
+      const dialogo = li.closest('[role="dialog"]')!.getBoundingClientRect();
+      return { rola: li.scrollWidth > li.clientWidth, sai: caixa.right > dialogo.right + 0.5 || caixa.left < dialogo.left - 0.5 };
+    }));
+    expect(medidas).toEqual([{ rola: false, sai: false }, { rola: false, sai: false }]);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  });
+}
+
 test('botão de fechar o montador com 44×44 px', async ({ page }) => {
   await page.goto('./');
   await page.getByRole('button', { name: 'Montar copo: Açaí 300ml' }).click();
