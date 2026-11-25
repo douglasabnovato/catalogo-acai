@@ -8,6 +8,13 @@
 
 **Finalizado:** sim — o único critério fora de "Atende" é o 5, que depende do responsável e tem issue com `depende-do-responsavel` (conta do GoatCounter, #7). O 9 passou a "Atende" em 16/11/2026, 15:04; em 18/11/2026, a API do Dependabot mostra 0 alertas abertos (as correções dos PRs #45 e #47 chegaram à `main`).
 
+## Produto
+
+- **Problema:** pedir pelo WhatsApp obriga o cliente a digitar item por item.
+- **Público:** quem compra na Garagem Lanches, pelo celular.
+- **Hipótese:** acreditamos que montar o pedido pronto no cardápio faz o cliente concluir a compra pelo WhatsApp. Saberemos quando o painel do GoatCounter mostrar, numa semana, o evento `pedido-enviado` em 30% ou mais das visitas.
+- **Métrica:** parcela das visitas com o evento `pedido-enviado` (toque em **Enviar no WhatsApp**), medido por GoatCounter (falta a conta, #7) — meta: 30% ou mais numa semana, decidida pelo coordenador em 10/11/2026 (D1), revisável pelo responsável (#16).
+
 ## Problema e hipótese
 
 **Problema e público:** Quem compra na Garagem Lanches monta o pedido no celular e o envia pronto pelo WhatsApp, sem digitar item por item.
@@ -33,6 +40,7 @@
 
 ## Histórico
 
+- 20/11/2026: bloco Produto padronizado, sem mudar critérios.
 - 18/11/2026: critério 7 medido de novo no site publicado depois da sprint-19 (mediana 1,31 → 1,22 s, #37). Critério 8 mais exigente: fundo inerte com diálogo aberto e itens `incomplete` do axe decididos (#34). Critério 9 com 0 alertas abertos. Resumo segue 11 de 12. Finalizado segue sim.
 - 16/11/2026, 15:04: regra geral do responsável para os alertas. O único que restava (`minimatch` 10.2.6, #44) tinha correção sem versão maior: o `typescript-eslint` 8.73.0 já pede o `minimatch` 11 (PR #47). Critério 9: Parcial → Atende. Resumo 10 → 11 de 12. Finalizado: não → sim.
 - 16/11/2026, 12:00: alertas do Dependabot ligados. Critério 9 segue Parcial, com motivo novo (1 alerta sem correção nem decisão, #44; 15 corrigidos só na sprint, PR #45). Resumo segue 10 de 12. Finalizado: sim → não.
